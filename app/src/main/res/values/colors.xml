@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red_opacity_50">#FFCDD2</color>
+    <color name="green_opacity_50">#C8E6C9</color>
+    <color name="blue_opacity_30">#4D2196F3</color>
+    <color name="orange_opacity_30">#4DFF9800</color>
+    <color name="orange">#FF6F00</color>
+
+
+    <color name="red">#dd2b1c</color>
+    <color name="blue">#0D47A1</color>
+
+    <color name="primaryColor">#dd2b1c</color>
+    <color name="primaryLightColor">#FFCDD2</color>
+    <color name="primaryDarkColor">#D32F2F</color>
+    <color name="secondaryColor">#66bb6a</color>
+    <color name="secondaryLightColor">#84c887</color>
+    <color name="secondaryDarkColor">#47824a</color>
+
+
+    <color name="primaryTextCreditNoteColor">#000000</color>
+    <color name="secondaryTextCreditNoteColor">#000000</color>
+    <color name="grayCreditNoteColor">#A3A3A3</color>
+
+    <color name="button_unable">#cccccc</color>
+    <color name="very_light_gray">#F6F6F6</color>
+    <color name="most_light_gray">#F8F8F8</color>
+    <color name="average_light_gray">#F1F1F1</color>
+    <color name="screen_background">#F3F3F3</color>
+    <color name="view_border">#F8F8F8</color>
+
+
+</resources>

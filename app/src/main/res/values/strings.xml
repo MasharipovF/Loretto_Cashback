@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">Loretto Cashback</string>
+    <string name="app_version">Versiya: %s</string>
+    <string name="loginHint">Login</string>
+    <string name="passwordHint">Parol</string>
+    <string name="connectBtn">Kirish</string>
+    <string name="askUsername">Iltimos loginingizni kiriting</string>
+    <string name="askPassword">Iltimos parolingizni kiriting</string>
+
+    <string name="doctype_main">ASOSIY OYNA</string>
+    <string name="doctype_open_activities">OCHIQ</string>
+    <string name="doctype_statistics">STATISTIKA</string>
+
+
+    <string name="btn_reload">QAYTA URINISH</string>
+
+    <string name="settings_title">Kirish sozlamalaru</string>
+    <string name="ipaddress">IP adres</string>
+    <string name="portnumber">Port</string>
+    <string name="companydb">Bazani nomi</string>
+    <string name="ok">OK</string>
+
+
+    <string name="dialog_app_version_incompatible_title">Версия программы устарела</string>
+    <string name="dialog_app_version_incompatible_message">У вас не установлена последняя версия программы. \nПожалуйста перейдите по ссылке и установите последнюю версию программы!</string>
+    <string name="close_app">Выйти с программы</string>
+
+
+    <string name="user_settings_title">Настройки пользователя</string>
+    <string name="branch">Филиал</string>
+    <string name="shop">Магазин</string>
+    <string name="accountUSD">Счет кассы - USD</string>
+    <string name="accountUZS">Счет кассы - UZS</string>
+    <string name="defaultCustomer">Разовый покупатель</string>
+    <string name="username">Пользователь</string>
+
+
+    <string name="module_items">ТОВАРЫ</string>
+    <string name="module_bp">КЛИЕНТЫ</string>
+    <string name="module_orders">ОТЛОЖКА</string>
+    <string name="module_invoices">ПРОДАЖА</string>
+    <string name="module_returns">ВОЗВРАТ</string>
+    <string name="module_invoperations">СКЛАД</string>
+    <string name="module_invlist">ЧЕКИ</string>
+    <string name="module_payments">ОПЛАТА</string>
+    <string name="module_reports">ОТЧЕТЫ</string>
+
+
+    <string name="doc_changed">Документ изменен</string>
+    <string name="doc_resetchanges">Сбросить внесенные изменения?</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="cancel">ОТМЕНА</string>
+
+
+    <!-- XPRINTER -->
+    <string name="printer_settings">Настройки принтера</string>
+    <string name="print_header_text">Текст в верхней части</string>
+    <string name="print_bottom_text">Текст в нижней части</string>
+    <string name="print_shop_info">Информация о магазине</string>
+    <string name="printer_dpi">DPI</string>
+    <string name="printer_width">Ширина(мм)</string>
+    <string name="printer_maxchar">Макс симв</string>
+    <string name="b_2_c">B 2 C</string>
+    <string name="b_2_b">B 2 B</string>
+    <string name="statistics">STATISTIKA</string>
+    <string name="choose">Tanlang …</string>
+    <string name="date_to">…gacha</string>
+    <string name="date_from">…dan</string>
+    <string name="quantity">Soni</string>
+    <string name="next_activity_date">Keyingi zadacha sanasi</string>
+    <string name="activity_status">Zadacha statusi</string>
+    <string name="invoice_date">Sotuv sanasi</string>
+    <string name="activity_date">Zadacha sanasi</string>
+    <string name="invoice_number">Sotuv IDsi</string>
+    <string name="proceed">ZADACHANI YAKINLASH</string>
+
+    <string name="dialog_adddoc_title">Hujjatni qo\'shish</string>
+    <string name="dialog_adddoc_message">Hujjatni qo\'shishni xohlaysizmi ??</string>
+    <!-- SAVE TO STORAGE -->
+
+
+</resources>
