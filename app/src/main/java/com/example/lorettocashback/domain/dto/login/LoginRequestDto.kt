@@ -5,19 +5,14 @@ import com.google.gson.annotations.SerializedName
 
 data class LoginRequestDto(
     @SerializedName("CompanyDB")
-    @Expose
-    var CompanyDB: String? = null,
+    var companyDB: String? = null,
 
     @SerializedName("Password")
-    @Expose
-    var Password: String? = null,
+    var password: String? = null,
 
     @SerializedName("UserName")
-    @Expose
-    var UserName: String? = null,
+    var userName: String? = null,
 
     @SerializedName("Language")
-    @Expose
-    var Language: Int? = 24
-
+    var language: Int? = 24
 )

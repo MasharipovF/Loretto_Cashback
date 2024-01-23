@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.lorettocashback.R
 import com.example.lorettocashback.core.BaseActivity
 import com.example.lorettocashback.core.GeneralConsts
+import com.example.lorettocashback.core.GeneralConsts.INTENT_EXTRA_BUSINESS_PARTNERS
 import com.example.lorettocashback.data.Preferences
 import com.example.lorettocashback.databinding.ActivityLoginBinding
 import com.example.lorettocashback.presentation.main.MainActivity
@@ -75,13 +76,23 @@ class LoginActivity : BaseActivity() {
             }
         }
 
-        mViewModel.logged.observe(this) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        mViewModel.loggedUser.observe(this) {
+            if (it != null) {
+                Log.d("TTTO", "kirdi")
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(INTENT_EXTRA_BUSINESS_PARTNERS, it)
+                startActivity(intent)
+            }
+            Log.d("TTTO", "tashqarida")
+
         }
 
         mViewModel.loginerror.observe(this) {
-            showSnackbar(binding.container, "Ошибка " + it, ResourcesCompat.getColor(resources, R.color.red, null))
+            showSnackbar(
+                binding.container,
+                "Ошибка " + it,
+                ResourcesCompat.getColor(resources, R.color.red, null)
+            )
         }
 
         binding.versionTv.text = getString(R.string.app_version, GeneralConsts.APP_VERSION)
@@ -106,7 +117,8 @@ class LoginActivity : BaseActivity() {
                 return@setOnClickListener
             } else binding.tilPassword.error = null
 
-            mViewModel.requestLogin()
+            Log.d("TTTO", "$username")
+            mViewModel.requestLogin(login = username, password = password)
 
         }
 
@@ -127,7 +139,7 @@ class LoginActivity : BaseActivity() {
         }
 
 
-       // tempLogin()
+        // tempLogin()
     }
 
 
@@ -146,7 +158,7 @@ class LoginActivity : BaseActivity() {
             return
         } else binding.tilPassword.error = null
 
-        mViewModel.requestLogin()
+//        mViewModel.requestLogin()
     }
 
     private fun isIpAddressWritten(): Boolean {

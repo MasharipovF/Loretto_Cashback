@@ -2,19 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.login.LoginActivity">
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="150dp"
-        android:visibility="visible"
         android:scaleType="centerInside"
-        android:layout_marginStart="20sp"
-        android:layout_marginEnd="20sp"
-        android:src="@drawable/mega_logo_mainpage1"
+        android:src="@drawable/loretto_logo"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.25" />
@@ -22,13 +22,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:visibility="visible"
-        android:scaleType="centerInside"
-        android:layout_marginBottom="5dp"
         android:layout_marginStart="20sp"
         android:layout_marginEnd="20sp"
+        android:layout_marginBottom="5dp"
+        android:scaleType="centerInside"
         android:src="@drawable/powerebysaplogo"
-        app:layout_constraintBottom_toTopOf="@id/versionTv"/>
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/versionTv" />
 
     <TextView
         android:id="@+id/versionTv"
@@ -42,38 +42,38 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="15dp"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imgBtnSettings"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="15dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ip_address_settings" />
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:id="@+id/imgBtnSettings"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ip_address_settings" />
+
+        </com.google.android.material.card.MaterialCardView>
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_textview"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_textview"
         android:orientation="horizontal"
-        app:errorEnabled="true"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -82,10 +82,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etvLogin"
             android:layout_width="match_parent"
-            android:paddingHorizontal="3dp"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:hint="@string/loginHint"
+            android:paddingHorizontal="3dp"
             android:singleLine="true"
             android:textSize="20sp" />
 
@@ -99,12 +99,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_textview"
         android:hint="@string/passwordHint"
         android:orientation="horizontal"
-        app:errorEnabled="true"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
-        android:background="@drawable/bg_textview"
+        app:errorEnabled="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilLogin">
@@ -130,8 +130,8 @@
         android:layout_marginTop="60dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="8dp"
         app:cardBackgroundColor="@color/primaryColor"
+        app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilPassword">
@@ -150,8 +150,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
-                app:lottie_loop="true"
                 app:lottie_colorFilter="@color/white"
+                app:lottie_loop="true"
                 app:lottie_rawRes="@raw/loading_circle"
                 app:lottie_speed="1" />
 

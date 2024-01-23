@@ -35,10 +35,6 @@ data class BusinessPartnersForPost(
     @Expose
     var Series: Int? = null,
 
-    @SerializedName("BPAddresses")
-    @Expose
-    var BPAddresses: List<BPAddresses>? = listOf(),
-
     @SerializedName("Currency")
     @Expose
     var Currency: String? = null,

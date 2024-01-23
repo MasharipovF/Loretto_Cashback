@@ -1,5 +1,6 @@
 package com.example.lorettocashback.data.repository
 
+import android.util.Log
 import com.example.lorettocashback.core.GeneralConsts
 import com.example.lorettocashback.data.Preferences
 import com.example.lorettocashback.data.remote.services.LoginService
@@ -10,16 +11,13 @@ import com.example.lorettocashback.util.retryIO
 
 interface LoginRepository {
     suspend fun requestLogin(): Any?
-    suspend fun getUserDefaults(
-        username: String
-    ): Any?
+    suspend fun getUserDefaults(username: String): Any?
 }
 
 class LoginRepositoryImpl(
 ) : LoginRepository {
 
-    override suspend fun requestLogin(
-    ): Any? {
+    override suspend fun requestLogin(): Any? {
 
         // THIS IS NEEDED FOR THIS. WHEN WE LOAD FIRST IN ENGLISH AND THEN IN RUSSIAN LANGUAGE, THEN RUSSIAN LANGUAGE ERROR STRINGS DISPLAYED CORRECTLY.
         // THAT IS WHY WE FIRST LOGIN IN ENGLISH, AND THE NEXT TIME LOGIN IN RUSSIAN
@@ -27,11 +25,24 @@ class LoginRepositoryImpl(
 
         val loginService: LoginService = LoginService.get()
 
-     //   Log.wtf("LOGIN", "$companyDB $password $username")
+        Log.wtf("PPPPI", GeneralConsts.COMPANY_DB)
 
         val response = retryIO {
-            loginService.requestLogin(LoginRequestDto(GeneralConsts.COMPANY_DB, GeneralConsts.PASSWORD, GeneralConsts.LOGIN, if (isFirstLogin) null else 24))
+            loginService.requestLogin(
+                LoginRequestDto(
+                    GeneralConsts.COMPANY_DB,
+                    GeneralConsts.PASSWORD,
+                    GeneralConsts.LOGIN,
+                    if (isFirstLogin) null else 24
+                )
+            )
         }
+
+        Log.wtf("PPPPI", "$response")
+
+
+        Log.wtf("PPPPI", "Keldi")
+
         return if (response.isSuccessful) {
             Preferences.firstLogin = false
             response.body()

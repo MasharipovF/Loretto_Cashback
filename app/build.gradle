@@ -2,12 +2,11 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.android.extensions'
-
+    id 'kotlin-kapt'
 }
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
 
     androidExtensions {
         experimental = true
@@ -19,6 +18,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +41,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.example.lorettocashback'
 }
 
 dependencies {
@@ -90,11 +92,11 @@ dependencies {
     //recyclerview swiper
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 
-    compile 'com.zxy.android:tiny:0.0.6'
+    implementation 'com.zxy.android:tiny:0.0.6'
 
     implementation 'com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.0.1'
 
-    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
     // for charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
@@ -105,6 +107,6 @@ dependencies {
 
 
 
-
+    implementation 'com.android.support:multidex:2.0.1'
 
 }

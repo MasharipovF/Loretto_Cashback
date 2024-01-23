@@ -22,21 +22,21 @@ object ServiceBuilder {
     }
 
 
-    fun <T> createCashbackService(serviceType: Class<T>): T {
-        return getRetrofitInstanceForCashback().create(serviceType)
-    }
+//    fun <T> createCashbackService(serviceType: Class<T>): T {
+//        return getRetrofitInstanceForCashback().create(serviceType)
+//    }
 
     fun <T> createService(serviceType: Class<T>): T {
         Log.d(
             "USER_SERVICE",
-            "${serviceType.name} // ${com.example.lorettocashback.data.Preferences.sessionID}"
+            "${serviceType.name} // ${Preferences.sessionID}"
         )
         return getRetrofitInstance().create(serviceType)
     }
 
     fun getRetrofitInstanceForLogin(): Retrofit {
         val BASE_URL: String = "https://${Preferences.ipAddress.toString()}:${Preferences.portNumber.toString()}/b1s/v2/"
-        Log.wtf("base_url", BASE_URL.toString())
+        Log.wtf("base_url", BASE_URL)
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
