@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/containerQr"
     android:background="@color/screen_background"
     tools:context=".presentation.qr_code.QrCodeActivity">
 
@@ -19,15 +18,15 @@
 
     <TextView
         android:id="@+id/textView"
-        android:textSize="22dp"
-        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="barcode topilmadi"
+        android:textColor="@color/black"
+        android:textSize="22dp"
         app:layout_constraintBottom_toTopOf="@id/podtverditBnt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scaner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintTop_toBottomOf="@id/scaner" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
