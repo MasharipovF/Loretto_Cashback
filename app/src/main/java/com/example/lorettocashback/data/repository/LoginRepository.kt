@@ -25,8 +25,6 @@ class LoginRepositoryImpl(
 
         val loginService: LoginService = LoginService.get()
 
-        Log.wtf("PPPPI", GeneralConsts.COMPANY_DB)
-
         val response = retryIO {
             loginService.requestLogin(
                 LoginRequestDto(
@@ -37,11 +35,6 @@ class LoginRepositoryImpl(
                 )
             )
         }
-
-        Log.wtf("PPPPI", "$response")
-
-
-        Log.wtf("PPPPI", "Keldi")
 
         return if (response.isSuccessful) {
             Preferences.firstLogin = false

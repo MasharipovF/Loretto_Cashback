@@ -14,12 +14,14 @@ interface BusinessPartnersService {
             ServiceBuilder.createService(BusinessPartnersService::class.java)
     }
 
-    @GET("BusinessPartners")
+    @GET("sml.svc/CASHBACK_USERS")
     suspend fun getUserData(
         @Header("B1S-CaseInsensitive") caseInsensitive: Boolean = true,
-        @Query("\$select") fields: String = "CardCode,CardName,Phone1",
+        @Query("\$select") fields: String? = null,
         @Query("\$filter") filter: String?=null,
     ): Response<BusinessPartnersVal>
+
+//    "CardCode,CardName,Phone1"
 
     @GET("BusinessPartners")
     suspend fun getFilteredBps(

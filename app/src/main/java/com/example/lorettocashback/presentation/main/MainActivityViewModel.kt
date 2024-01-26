@@ -3,6 +3,7 @@ package com.example.lorettocashback.presentation.main
 import androidx.lifecycle.MutableLiveData
 import com.example.lorettocashback.core.BaseViewModel
 import com.example.lorettocashback.data.Preferences
+import com.example.lorettocashback.data.entity.businesspartners.BusinessPartners
 import com.example.lorettocashback.data.entity.masterdatas.AppVersion
 import com.example.lorettocashback.data.entity.masterdatas.CompanyInfo
 import com.example.lorettocashback.domain.interactor.*
@@ -12,62 +13,21 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : BaseViewModel() {
+    var exitBtn: MutableLiveData<Unit> = MutableLiveData()
+    var openNotificationBtn: MutableLiveData<Unit> = MutableLiveData()
+    var openQRBtn: MutableLiveData<Unit> = MutableLiveData()
+    var openHistoryBtn: MutableLiveData<Unit> = MutableLiveData()
 
-    private val masterDataInteractor: MasterDataInteractor by lazy { MasterDataInteractorImpl() }
-
-    var exchangeRate: MutableLiveData<Double> = MutableLiveData()
-
-    var loading: MutableLiveData<Boolean> = MutableLiveData()
-    var errorLoading: MutableLiveData<Boolean> = MutableLiveData()
-
-    var companyInfo: MutableLiveData<CompanyInfo> = MutableLiveData()
-
-    var appVersion: MutableLiveData<AppVersion> = MutableLiveData()
-
-
-    init {
-        getCompanyInfo()
+    fun exitFun() {
+        exitBtn.value = Unit
     }
-
-    fun getAppVersion() {
-       /* Log.wtf("APP_VERSION", "LOADING")
-        vmScope.launch {
-            val version = masterDataInteractor.getAppVersion()
-            if (version != null) {
-                appVersion.postValue(version)
-                Log.wtf("APP_VERSION", version.toString())
-            }
-            Log.wtf("APP_VERSION", version.toString())
-
-        }*/
+    fun openNotificationFun() {
+        openNotificationBtn.value = Unit
     }
-
-
-    /*fun getExchangeRate() {
-        vmScope.launch {
-            loading.postValue(true)
-
-            val response = masterDataInteractor.getExchangeRate()
-            if (response != null) {
-                exchangeRate.postValue(response)
-            } else
-                errorItem.postValue("Ошибка при загрузке: ${masterDataInteractor.errorMessage}")
-
-            loading.postValue(false)
-        }
-    }*/
-
-    fun getCompanyInfo() {
-        vmScope.launch {
-
-            val response = masterDataInteractor.getCompanyInfo()
-            if (response != null) {
-                Preferences.totalsAccuracy = response.totalsAccuracy
-                Preferences.pricesAccuracy = response.priceAccuracy
-            } else {
-                errorItem.postValue("Ошибка при загрузке данных компании: ${masterDataInteractor.errorMessage}")
-            }
-        }
+    fun openQRFun() {
+        openQRBtn.value = Unit
     }
-
+    fun openHistoryFun() {
+        openHistoryBtn.value = Unit
+    }
 }

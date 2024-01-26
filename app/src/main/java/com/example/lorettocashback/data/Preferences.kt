@@ -2,7 +2,6 @@ package com.example.lorettocashback.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.Gson
 
 object Preferences {
     const val CREDENTIALS = "CREDENTIALS"
@@ -94,10 +93,10 @@ object Preferences {
             preferences.edit().putString(Preferences::defaultWhs.name, value).apply()
         }
 
-    var defaultPriceList: Int
-        get() = preferences.getInt(Preferences::defaultPriceList.name, 1)
+    var cardName: String?
+        get() = preferences.getString(Preferences::cardName.name, null)
         set(value) {
-            preferences.edit().putInt(Preferences::defaultPriceList.name, value).apply()
+            preferences.edit().putString(Preferences::cardName.name, value).apply()
         }
 
     var returnsPassword: String?

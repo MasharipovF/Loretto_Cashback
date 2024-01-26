@@ -9,9 +9,11 @@
     tools:context=".presentation.main.MainActivity">
 
     <ImageView
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_margin="24dp"
+        android:id="@+id/exitBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
@@ -23,7 +25,8 @@
         android:id="@+id/textSimple1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         android:text="Здравствуйте,"
         android:textColor="@color/black"
         android:textSize="24sp"
@@ -35,7 +38,7 @@
         android:id="@+id/textName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:text="Мухаммаджон!"
         android:textColor="@color/black"
@@ -49,7 +52,7 @@
         android:id="@+id/textSimple2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="Тип пользователя:"
         android:textColor="@color/black"
@@ -61,7 +64,7 @@
         android:id="@+id/textTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:text="Продавец"
         android:textColor="@color/black"
@@ -72,7 +75,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="42dp"
         app:cardBackgroundColor="#F7F7F7"
         app:cardCornerRadius="24dp"
@@ -154,8 +157,8 @@
 
     <ImageView
         android:id="@+id/notificationBtn"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
@@ -180,8 +183,8 @@
 
     <ImageView
         android:id="@+id/historyBtn"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"

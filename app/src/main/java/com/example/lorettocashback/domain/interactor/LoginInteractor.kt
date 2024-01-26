@@ -5,7 +5,6 @@ import com.example.lorettocashback.core.GeneralConsts
 import com.example.lorettocashback.data.Preferences
 import com.example.lorettocashback.data.entity.businesspartners.BusinessPartners
 import com.example.lorettocashback.data.entity.businesspartners.BusinessPartnersVal
-import com.example.lorettocashback.data.entity.userdefaults.UserDefaults
 import com.example.lorettocashback.data.repository.BpRepository
 import com.example.lorettocashback.data.repository.BpRepositoryImpl
 import com.example.lorettocashback.data.repository.LoginRepository
@@ -14,7 +13,7 @@ import com.example.lorettocashback.domain.dto.error.ErrorResponse
 import com.example.lorettocashback.domain.dto.login.LoginResponseDto
 
 interface LoginInteractor {
-    suspend fun requestLogin(login: String, passwrod: String): BusinessPartners?
+    suspend fun requestLogin(phone: String, password: String): BusinessPartners?
     var errorMessage: String?
 }
 
@@ -26,8 +25,8 @@ class LoginInteractorImpl() : LoginInteractor {
     override var errorMessage: String? = null
 
     override suspend fun requestLogin(
-        login: String,
-        passwrod: String,
+        phone: String,
+        password: String,
     ): BusinessPartners? {
 
         val response = repository.requestLogin()
@@ -41,14 +40,15 @@ class LoginInteractorImpl() : LoginInteractor {
             Log.d("USER_INTERACTOR", "sessionId is ${response.SessionId}")
 
             //KLIENT KIRITGAN LOGIN PAROL BOYICHA QIDIRISH KERAK
-            val userResponse = bpRepository.getUserData(login, passwrod)
+            val userResponse = bpRepository.getUserData(phone, password)
 
             if (userResponse is BusinessPartnersVal) {
 
                 if (!userResponse.value.isNullOrEmpty()){
-                   return userResponse.value[0]
+                    Preferences.cardName = userResponse.value[0].CardName
+                    return userResponse.value[0]
                 } else {
-                    errorMessage = "Бизнес партнер с кодом $login не найден!"
+                    errorMessage = "Бизнес партнер с кодом $phone не найден!"
                     return  null
                 }
 

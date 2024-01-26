@@ -11,7 +11,7 @@ interface BpInteractor {
 
 
 
-    suspend fun getUserdata(login: String, password: String): BusinessPartners?
+//    suspend fun getUserdata(login: String, password: String): BusinessPartners?
     val errorMessage: String?
 }
 
@@ -23,25 +23,25 @@ class BpInteractorImpl : BpInteractor {
     override var errorMessage: String? = null
 
 
-
-    override suspend fun getUserdata(login: String, password: String): BusinessPartners? {
-        val response = repository.getUserData(login, password)
-
-        return if (response is BusinessPartnersVal) {
-
-            if (!response.value.isNullOrEmpty()){
-                response.value[0]
-            } else {
-                errorMessage = "Бизнес партнер с кодом $login не найден!"
-                null
-            }
-
-        } else {
-            errorMessage = (response as ErrorResponse).error.message.value
-            null
-        }
-
-    }
+//
+//    override suspend fun getUserdata(login: String, password: String): BusinessPartners? {
+//        val response = repository.getUserData(login, password)
+//
+//        return if (response is BusinessPartnersVal) {
+//
+//            if (!response.value.isNullOrEmpty()){
+//                response.value[0]
+//            } else {
+//                errorMessage = "Бизнес партнер с кодом $login не найден!"
+//                null
+//            }
+//
+//        } else {
+//            errorMessage = (response as ErrorResponse).error.message.value
+//            null
+//        }
+//
+//    }
 
 
 }

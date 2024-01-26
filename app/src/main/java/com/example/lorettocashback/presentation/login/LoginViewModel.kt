@@ -22,16 +22,12 @@ class LoginViewModel : BaseViewModel() {
             loading.postValue(true)
 
             val mLoggedUser = interactor.requestLogin(login, password)
-            Log.d("TTTU", "$mLoggedUser")
 
 
-            if (loggedUser != null) {
-                Log.d("TTTU", "requestLogin: kirdi")
-                loggedUser.value = mLoggedUser
+            if (mLoggedUser != null) {
+                loggedUser.postValue(mLoggedUser)
             } else {
-                Log.d("TTTU", "requestLogin: tash")
-
-                loginerror.value = interactor.errorMessage
+                loginerror.postValue(interactor.errorMessage)
             }
 
             loading.postValue(false)

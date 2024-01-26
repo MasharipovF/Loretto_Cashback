@@ -4,11 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.lorettocashback.R
 import com.example.lorettocashback.core.BaseActivity
 import com.example.lorettocashback.core.GeneralConsts
+import com.example.lorettocashback.data.Preferences
+import com.example.lorettocashback.data.entity.businesspartners.BusinessPartners
 import com.example.lorettocashback.databinding.ActivityMainBinding
+import com.example.lorettocashback.presentation.history.HistoryActivity
+import com.example.lorettocashback.presentation.login.LoginActivity
+import com.example.lorettocashback.presentation.notification.NotificationActivity
+import com.example.lorettocashback.presentation.qr_code.QrCodeActivity
 import com.example.lorettocashback.util.enums.ActivityBpTypes
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.*
@@ -25,118 +33,55 @@ class MainActivity : BaseActivity() {
 
         mViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
-        supportActionBar?.title = resources.getString(R.string.doctype_main)
+        val bundle: Bundle? = intent.extras
+
+        val data =
+            bundle?.getParcelable(GeneralConsts.INTENT_EXTRA_BUSINESS_PARTNERS) as BusinessPartners?
+
+        binding.textName.text = data?.CardName
 
 
-        mViewModel.connectionError.observe(this) {
-            Toast.makeText(
-                this,
-                "Connection error: " + mViewModel.errorString.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+        mViewModel.exitBtn.observe(this, exitScreenObserver)
+        mViewModel.openNotificationBtn.observe(this, notificationScreenObserver)
+        mViewModel.openQRBtn.observe(this, qrCodeScreenObserver)
+        mViewModel.openHistoryBtn.observe(this, historyScreenObserver)
 
-            if (mViewModel.loading.value == true) {
-                mViewModel.loading.value = false
-            }
-
+        binding.exitBtn.setOnClickListener {
+            mViewModel.exitFun()
         }
 
-
-        /* mViewModel.getExchangeRate()
-         showLoader(this)*/
-
-        mViewModel.appVersion.observe(this) {
-            if (it != null) {
-                (this as BaseActivity).showAlertAppVersionIncompatible(it)
-            }
+        binding.notificationBtn.setOnClickListener {
+            mViewModel.openNotificationFun()
         }
 
+        binding.qrBtn.setOnClickListener {
+            mViewModel.openQRFun()
+        }
 
-    }
-
-   /* override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }*/
-
-
-    override fun onResume() {
-        super.onResume()
-        mViewModel.getAppVersion()
-    }
-
-    @OptIn(InternalCoroutinesApi::class)
-    override fun startRepeatingJob(intervalInMs: Long): Job {
-        return CoroutineScope(Dispatchers.Default).launch {
-            while (NonCancellable.isActive) {
-                delay(intervalInMs)
-                Log.wtf("REPEATING_JOB", "LALA")
-            }
+        binding.historyBtn.setOnClickListener {
+            mViewModel.openHistoryFun()
         }
     }
 
-   /* override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_user_settings -> {
-                val intent: Intent = Intent(this, Settings::class.java)
-                startActivity(intent)
-                true
-            }
-            R.id.menu_exchange -> {
-                // mViewModel.getExchangeRate()
-                // mViewModel.getDiscountByDocTotal()
-                // showLoader(this)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }*/
-
-/*
-    private fun showLoader(activity: Activity) {
-        val dialog = Dialog(activity)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setContentView(R.layout.dialog_loader)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-
-        val loader = dialog.findViewById<LottieAnimationView>(R.id.loader)
-        val btnReload = dialog.findViewById<Button>(R.id.btnReload)
-
-        dialog.setOnCancelListener {
-            finish()
-        }
-        mViewModel.loading.observe(this) {
-            if (it) {
-                loader.visibility = View.VISIBLE
-                btnReload.visibility = View.GONE
-            } else {
-                loader.visibility = View.GONE
-                btnReload.visibility = View.VISIBLE
-
-            }
-        }
-
-        mViewModel.exchangeRate.observe(this) {
-            Preferences.currencyDate = Utils.getCurrentDateinUSAFormat()
-            Preferences.currencyRate = it
-            dialog.dismiss()
-        }
-
-        mViewModel.errorItem.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        }
-
-        btnReload.setOnClickListener {
-            mViewModel.getExchangeRate()
-        }
-
-        dialog.show()
-        DialogSizeUtils.resizeDialog(dialog, this, 70, 30)
+    private val exitScreenObserver = Observer<Unit> {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
-*/
 
+    private val notificationScreenObserver = Observer<Unit> {
+        val intent = Intent(this, NotificationActivity::class.java)
+        startActivity(intent)
+    }
 
+    private val qrCodeScreenObserver = Observer<Unit> {
+        val intent = Intent(this, QrCodeActivity::class.java)
+        startActivity(intent)
+    }
 
-
+    private val historyScreenObserver = Observer<Unit> {
+        val intent = Intent(this, HistoryActivity::class.java)
+        startActivity(intent)
+    }
 
 }

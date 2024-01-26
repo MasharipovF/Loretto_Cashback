@@ -3,6 +3,7 @@ package com.example.lorettocashback.presentation.login
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -78,20 +80,18 @@ class LoginActivity : BaseActivity() {
 
         mViewModel.loggedUser.observe(this) {
             if (it != null) {
-                Log.d("TTTO", "kirdi")
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra(INTENT_EXTRA_BUSINESS_PARTNERS, it)
                 startActivity(intent)
+                finish()
             }
-            Log.d("TTTO", "tashqarida")
-
         }
 
         mViewModel.loginerror.observe(this) {
             showSnackbar(
                 binding.container,
-                "Ошибка " + it,
-                ResourcesCompat.getColor(resources, R.color.red, null)
+                "Ошибка $it",
+                R.color.red
             )
         }
 
@@ -132,7 +132,7 @@ class LoginActivity : BaseActivity() {
             false
         }
 
-        binding.etvLogin.setText(Preferences.userName)
+//        binding.etvLogin.setText(Preferences.userName)
 
         binding.imgBtnSettings.setOnClickListener {
             showIpAddressDialog(this)
@@ -164,8 +164,7 @@ class LoginActivity : BaseActivity() {
     private fun isIpAddressWritten(): Boolean {
         if (Preferences.ipAddress.isNullOrEmpty()) return false
         if (Preferences.portNumber.isNullOrEmpty()) return false
-        if (Preferences.companyDB.isNullOrEmpty()) return false
-        return true
+        return !Preferences.companyDB.isNullOrEmpty()
     }
 
     private fun showIpAddressDialog(activity: Activity) {
