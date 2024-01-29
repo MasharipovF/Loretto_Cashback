@@ -14,47 +14,49 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lorettocashback.R
 import com.example.lorettocashback.core.BaseActivity
 import com.example.lorettocashback.data.model.SimpleData
+import com.example.lorettocashback.data.model.StatusEnum
 import com.example.lorettocashback.databinding.ActivityHistoryBinding
 import com.example.lorettocashback.presentation.adapter.HistoryAdapter
+import kotlinx.android.synthetic.main.activity_history.calendar1
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 val list = listOf(
     SimpleData(
-        "FV87995SFG6",
-        "14.10.2022",
-        "2$"
+        "LF - 230B",
+        "2022-10-14",
+        "2$",
+        StatusEnum.CANCELLED,
+        "Cancelled"
     ),
     SimpleData(
-        "FV80005SFG7",
-        "15.10.2022",
-        "5$"
+        "LF - 230B",
+        "2022-10-14",
+        "2$",
+        StatusEnum.GAINED,
+        "Gained"
     ),
     SimpleData(
-        "FV000000000",
-        "16.10.2022",
-        "3$"
+        "LF - 230B",
+        "2022-10-14",
+        "2$",
+        StatusEnum.WITHDREW,
+        "WithDrew"
     ),
     SimpleData(
-        "FV444444444",
-        "17.10.2022",
-        "1$"
+        "LF - 230B",
+        "2022-10-14",
+        "2$",
+        StatusEnum.CANCELLED,
+        "Cancelled"
     ),
     SimpleData(
-        "FV222222222",
-        "18.10.2022",
-        "4$"
-    ),
-    SimpleData(
-        "Ff44445SFG6",
-        "19.10.2022",
-        "7$"
-    ),
-    SimpleData(
-        "FV879555556",
-        "20.10.2022",
-        "6$"
-    ),
+        "LF - 230B",
+        "2022-10-14",
+        "2$",
+        StatusEnum.RETURNED,
+        "Returned"
+    )
 )
 
 class HistoryActivity : BaseActivity() {
@@ -62,6 +64,8 @@ class HistoryActivity : BaseActivity() {
     private lateinit var binding: ActivityHistoryBinding
     private lateinit var mViewModel: HistoryViewModel
     private lateinit var rvAdapter: HistoryAdapter
+    private lateinit var myCalendar: Calendar
+    private lateinit var myCalendar1: Calendar
 
     override fun init(savedInstanceState: Bundle?) {
         binding = ActivityHistoryBinding.inflate(layoutInflater)
@@ -69,7 +73,8 @@ class HistoryActivity : BaseActivity() {
 
         mViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         rvAdapter = HistoryAdapter()
-        val myCalendar = Calendar.getInstance()
+        myCalendar = Calendar.getInstance()
+        myCalendar1 = Calendar.getInstance()
 
         binding.list.adapter = rvAdapter
         binding.list.layoutManager = LinearLayoutManager(
@@ -89,16 +94,21 @@ class HistoryActivity : BaseActivity() {
             dialog.window!!.setBackgroundDrawable(null)
         }
 
-        binding.textDataC.setOnClickListener {
+        binding.calendar1.setOnClickListener {
             openCalendar(myCalendar, datePickerFun(myCalendar, binding.textDataC))
         }
 
-        binding.textDataPo.setOnClickListener {
+        binding.calendar2.setOnClickListener {
             openCalendar(myCalendar, datePickerFun(myCalendar, binding.textDataPo))
+        }
+
+        binding.cancelBnt.setOnClickListener {
+            mViewModel.clickCancelFun()
         }
 
         mViewModel.textDate1.observe(this, textDateObserve1)
         mViewModel.textDate2.observe(this, textDateObserve2)
+        mViewModel.clickCancel.observe(this, clickCancelObserve)
 
     }
 
@@ -114,12 +124,12 @@ class HistoryActivity : BaseActivity() {
 
     private fun updateLabel(myCalendar: Calendar, textView: TextView) {
         val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
 
         if (textView == binding.textDataC) {
-            mViewModel.textDateFun1(sdf.format(myCalendar.time))
+            mViewModel.textDate1Fun(sdf.format(myCalendar.time))
         } else {
-            mViewModel.textDateFun2(sdf.format(myCalendar.time))
+            mViewModel.textDate2Fun(sdf.format(myCalendar.time))
         }
     }
 
@@ -141,5 +151,13 @@ class HistoryActivity : BaseActivity() {
 
     private val textDateObserve2 = Observer<String> {
         binding.textDataPo.text = it
+    }
+
+    private val clickCancelObserve = Observer<Unit> {
+        myCalendar.set(Calendar.YEAR, myCalendar1.get(Calendar.YEAR))
+        myCalendar.set(Calendar.MONTH, myCalendar1.get(Calendar.MONTH))
+        myCalendar.set(Calendar.DAY_OF_MONTH, myCalendar1.get(Calendar.DAY_OF_MONTH))
+        binding.textDataC.text = "Выбирать ..."
+        binding.textDataPo.text = "Выбирать ..."
     }
 }

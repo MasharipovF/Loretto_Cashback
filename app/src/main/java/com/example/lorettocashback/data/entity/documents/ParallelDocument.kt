@@ -1,10 +1,10 @@
 package com.example.lorettocashback.data.entity.documents
 
-import com.example.lorettocashback.data.entity.businesspartners.BusinessPartners
+import com.example.lorettocashback.data.entity.businesspartners.CashbackUsers
 import com.example.lorettocashback.data.entity.masterdatas.SalesManagers
 
 data class ParallelDocument(
-    var BusinessPartner: BusinessPartners?,
+    var BusinessPartner: CashbackUsers?,
     var BpPhone: String?,
     var DocDate: String?,
     var DocDueDate: String?,

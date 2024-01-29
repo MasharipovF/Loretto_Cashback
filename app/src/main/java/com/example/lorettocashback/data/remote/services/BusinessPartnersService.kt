@@ -18,8 +18,8 @@ interface BusinessPartnersService {
     suspend fun getUserData(
         @Header("B1S-CaseInsensitive") caseInsensitive: Boolean = true,
         @Query("\$select") fields: String? = null,
-        @Query("\$filter") filter: String?=null,
-    ): Response<BusinessPartnersVal>
+        @Query("\$filter") filter: String? = null,
+    ): Response<CashbackUsersVal>
 
 //    "CardCode,CardName,Phone1"
 
@@ -30,7 +30,7 @@ interface BusinessPartnersService {
         @Query("\$filter") filter: String = "",
         @Query("\$orderby") order: String = "CardName asc",
         @Query("\$skip") skipValue: Int = 0
-    ): Response<BusinessPartnersVal>
+    ): Response<CashbackUsersVal>
 
     // THROUGH SEMANTIC LAYER
     @GET("sml.svc/BPLIST_DEBTBYSHOP")
@@ -39,13 +39,13 @@ interface BusinessPartnersService {
         @Query("\$filter") filter: String = "",
         @Query("\$orderby") order: String = "CardName asc",
         @Query("\$skip") skipValue: Int = 0
-    ): Response<BusinessPartnersVal>
+    ): Response<CashbackUsersVal>
 
     @GET("sml.svc/BPLIST_DEBTBYSHOP")
     suspend fun getBusinessPartnerTotalDebtByShop(
-        @Query("\$filter") filter: String?=null,
-        @Query("\$apply") aggregation: String ,
-    ): Response<BusinessPartnersVal>
+        @Query("\$filter") filter: String? = null,
+        @Query("\$apply") aggregation: String,
+    ): Response<CashbackUsersVal>
 
     @GET("BusinessPartners")
     suspend fun checkIfPhoneExists(
@@ -53,19 +53,19 @@ interface BusinessPartnersService {
         @Header("Prefer") maxPage: String = "odata.maxpagesize=1",
         @Query("\$select") fields: String = "CardCode,CardName,Phone1",
         @Query("\$filter") filter: String = ""
-    ): Response<BusinessPartnersVal>
+    ): Response<CashbackUsersVal>
 
 
     @GET("BusinessPartners('{bpCode}')")
     suspend fun getBpInfo(
         @Path("bpCode") bpCode: String,
         @Query("\$select") fields: String = "CardCode,CardName,CardType,Currency,GroupCode,CurrentAccountBalance,OpenDeliveryNotesBalance,OpenOrdersBalance,FederalTaxID,Phone1,Phone2,ShipToDefault,CreditLimit,MaxCommitment,PriceListNum,Valid,Frozen,Series,BPAddresses",
-    ): Response<BusinessPartners>
+    ): Response<CashbackUsers>
 
     @POST("BusinessPartners")
     suspend fun insertNewBp(
         @Body bp: BusinessPartnersForPost
-    ): Response<BusinessPartners>
+    ): Response<CashbackUsers>
 
 
     /*

@@ -54,13 +54,11 @@ class QrCodeActivity : BaseActivity() {
         }
     }
 
-
     private lateinit var binding: ActivityQrCodeBinding
     private lateinit var rvAdapter: QrCodeAdapter
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var barcodeScanner: BarcodeScanner
-
 
     override fun init(savedInstanceState: Bundle?) {
         binding = ActivityQrCodeBinding.inflate(layoutInflater)
@@ -68,7 +66,6 @@ class QrCodeActivity : BaseActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         barcodeScanner = createBarcodeScanner()
-
 
         if (ActivityCompat.checkSelfPermission(
                 this@QrCodeActivity,

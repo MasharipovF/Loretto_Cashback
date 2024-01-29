@@ -6,15 +6,16 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="88dp"
         android:layout_marginHorizontal="4dp"
         android:layout_marginVertical="8dp"
-        app:cardBackgroundColor="@color/green_item"
+        app:cardBackgroundColor="#F7F7F7"
         app:cardCornerRadius="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_marginVertical="4dp"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
@@ -27,24 +28,33 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:gravity="center|start"
-                    android:text="Зачислено"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
-
-                <TextView
-                    android:id="@+id/textNum"
+                    android:id="@+id/itemName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:gravity="center"
-                    android:text="FV87995SFG6"
+                    android:text="LF - 230B"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Дата продажи"
+                    android:textColor="#52B656"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="2022-10-14"
+                    android:textColor="#2B832F"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -57,24 +67,43 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textDate"
+                    android:id="@+id/statusItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="14.10.2022"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/bg_orange"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:textColor="@color/orange_text"
+                    android:textSize="14sp"
+                    android:text="Failed"/>
 
-
-                <TextView
-                    android:id="@+id/textSum"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="2$"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Бонус"
+                        android:textColor="#52B656"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/cashbackAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2$"
+                        android:textColor="#2B832F"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+
             </LinearLayout>
         </LinearLayout>
 

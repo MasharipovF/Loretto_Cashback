@@ -6,12 +6,18 @@ import com.example.lorettocashback.core.BaseViewModel
 class HistoryViewModel : BaseViewModel() {
     var textDate1: MutableLiveData<String> = MutableLiveData()
     var textDate2: MutableLiveData<String> = MutableLiveData()
+    var clickCancel: MutableLiveData<Unit> = MutableLiveData()
 
-    fun textDateFun1(text: String) {
+    fun textDate1Fun(text: String) {
         textDate1.value = text
     }
-    fun textDateFun2(text: String) {
+
+    fun textDate2Fun(text: String) {
         textDate2.value = text
+    }
+
+    fun clickCancelFun() {
+        clickCancel.value = Unit
     }
 
 }

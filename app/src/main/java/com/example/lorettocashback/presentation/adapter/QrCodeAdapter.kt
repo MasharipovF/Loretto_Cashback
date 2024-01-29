@@ -26,7 +26,7 @@ class QrCodeAdapter : ListAdapter<SimpleData, QrCodeAdapter.EventHolder>(EventDi
             oldItem: SimpleData,
             newItem: SimpleData
         ): Boolean {
-            return oldItem.num == newItem.num
+            return oldItem.name == newItem.name
         }
 
     }
@@ -44,7 +44,7 @@ class QrCodeAdapter : ListAdapter<SimpleData, QrCodeAdapter.EventHolder>(EventDi
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
-                binding.textNum.text = this.num
+                binding.textNum.text = this.name
                 binding.textSum.text = this.sum
             }
         }

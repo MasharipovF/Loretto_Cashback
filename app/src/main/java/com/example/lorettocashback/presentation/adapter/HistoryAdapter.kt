@@ -1,11 +1,13 @@
 package com.example.lorettocashback.presentation.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lorettocashback.R
 import com.example.lorettocashback.data.model.SimpleData
 import com.example.lorettocashback.databinding.ItemHistoryBinding
 
@@ -26,7 +28,7 @@ class HistoryAdapter : ListAdapter<SimpleData, HistoryAdapter.EventHolder>(Event
             oldItem: SimpleData,
             newItem: SimpleData
         ): Boolean {
-            return oldItem.num == newItem.num
+            return oldItem.name == newItem.name
         }
 
     }
@@ -44,9 +46,12 @@ class HistoryAdapter : ListAdapter<SimpleData, HistoryAdapter.EventHolder>(Event
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
-                binding.textNum.text = this.num
+                binding.itemName.text = this.name
                 binding.textDate.text = this.date
-                binding.textSum.text = this.sum
+                binding.cashbackAmount.text = this.sum
+                binding.statusItem.text = this.textStatus
+                binding.statusItem.setBackgroundResource(this.status.colorItemEnum)
+                binding.statusItem.setTextColor(Color.parseColor(this.status.textColorEnum))
             }
         }
     }

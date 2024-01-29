@@ -33,7 +33,6 @@ class LoginActivity : BaseActivity() {
     private lateinit var mViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
-
     override fun init(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -117,8 +116,7 @@ class LoginActivity : BaseActivity() {
                 return@setOnClickListener
             } else binding.tilPassword.error = null
 
-            Log.d("TTTO", "$username")
-            mViewModel.requestLogin(login = username, password = password)
+            mViewModel.requestLogin(phone = username, password = password)
 
         }
 
@@ -132,33 +130,11 @@ class LoginActivity : BaseActivity() {
             false
         }
 
-//        binding.etvLogin.setText(Preferences.userName)
-
         binding.imgBtnSettings.setOnClickListener {
             showIpAddressDialog(this)
         }
 
 
-        // tempLogin()
-    }
-
-
-    private fun tempLogin() {
-        binding.etvPassword.setText("1234")
-        val username = binding.etvLogin.text.toString()
-        val password = binding.etvPassword.text.toString()
-
-        if (username == "") {
-            binding.tilLogin.error = getString(R.string.askUsername)
-            return
-        } else binding.tilLogin.error = null
-
-        if (password == "") {
-            binding.tilPassword.error = getString(R.string.askPassword)
-            return
-        } else binding.tilPassword.error = null
-
-//        mViewModel.requestLogin()
     }
 
     private fun isIpAddressWritten(): Boolean {

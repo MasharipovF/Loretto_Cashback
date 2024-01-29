@@ -32,8 +32,15 @@
     <color name="view_border">#F8F8F8</color>
 
 
-    <color name="green_item">#C4F0C4</color>
-    <color name="blue_item">#AFEDF4</color>
+    <color name="green_item">#98E49B</color>
+    <color name="red_item">#F3A3A1</color>
+    <color name="blue_item">#8BC0EF</color>
+    <color name="orange_item">#F9DAAC</color>
+
+    <color name="green_text">#358E39</color>
+    <color name="red_text">#E53935</color>
+    <color name="blue_text">#0F64AF</color>
+    <color name="orange_text">#FF6F00</color>
 
 
 </resources>
