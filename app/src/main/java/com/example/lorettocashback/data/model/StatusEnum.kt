@@ -2,9 +2,9 @@ package com.example.lorettocashback.data.model
 
 import com.example.lorettocashback.R
 
-enum class StatusEnum(val colorItemEnum: Int, val textColorEnum: String) {
-    GAINED(R.drawable.bg_green, "#358E39"),
-    RETURNED(R.drawable.bg_red, "#E53935"),
-    WITHDREW(R.drawable.bg_blue, "#0F64AF"),
-    CANCELLED(R.drawable.bg_orange, "#FF6F00")
+enum class StatusEnum(val statusName: String, val colorItemEnum: Int, val textColorEnum: Int) {
+    GAINED("GAIN", R.drawable.bg_green, R.color.green_text),
+    RETURNED("RETURN", R.drawable.bg_red, R.color.red_text),
+    WITHDREW("WITHDREW", R.drawable.bg_blue, R.color.blue_text),
+    CANCELLED("CANCEL", R.drawable.bg_orange, R.color.orange_text)
 }

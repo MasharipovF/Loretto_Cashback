@@ -1,44 +1,52 @@
 package com.example.lorettocashback.presentation.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lorettocashback.R
-import com.example.lorettocashback.data.model.SimpleData
+import com.example.lorettocashback.data.entity.history.CashbackHistory
+import com.example.lorettocashback.data.model.StatusEnum
+import com.example.lorettocashback.databinding.BottomLoaderRecyclerBinding
 import com.example.lorettocashback.databinding.ItemHistoryBinding
+import com.example.lorettocashback.presentation.SapMobileApplication
+import com.example.lorettocashback.util.LoadMore
 
-class HistoryAdapter : ListAdapter<SimpleData, HistoryAdapter.EventHolder>(EventDiffUtil) {
+class HistoryAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(EventDiffUtil) {
 
-    private var clickListener: ((SimpleData) -> Unit)? = null
+    private var clickListener: ((CashbackHistory) -> Unit)? = null
+    private var load: ((Int) -> Unit)? = null
 
-    object EventDiffUtil : DiffUtil.ItemCallback<SimpleData>() {
+    object EventDiffUtil : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(
-            oldItem: SimpleData,
-            newItem: SimpleData
+            oldItem: Any,
+            newItem: Any
         ): Boolean {
             return oldItem == newItem
         }
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
-            oldItem: SimpleData,
-            newItem: SimpleData
+            oldItem: Any,
+            newItem: Any
         ): Boolean {
-            return oldItem.name == newItem.name
+            return if (oldItem is CashbackHistory && newItem is CashbackHistory) {
+                oldItem.itemName == newItem.itemName || oldItem.serialNumber == newItem.serialNumber
+            } else {
+                false
+            }
         }
 
     }
 
-    inner class EventHolder(private val binding: ItemHistoryBinding) :
+    private inner class HistoryViewHolder(private val binding: ItemHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                clickListener?.invoke(getItem(absoluteAdapterPosition))
+                clickListener?.invoke(getItem(absoluteAdapterPosition) as CashbackHistory)
             }
 
         }
@@ -46,29 +54,77 @@ class HistoryAdapter : ListAdapter<SimpleData, HistoryAdapter.EventHolder>(Event
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
-                binding.itemName.text = this.name
-                binding.textDate.text = this.date
-                binding.cashbackAmount.text = this.sum
-                binding.statusItem.text = this.textStatus
-                binding.statusItem.setBackgroundResource(this.status.colorItemEnum)
-                binding.statusItem.setTextColor(Color.parseColor(this.status.textColorEnum))
+                if (this is CashbackHistory) {
+
+                    binding.itemName.text = this.itemName
+                    binding.textDate.text = this.date
+                    binding.cashbackAmount.text = this.cashbackAmount.toString()
+                    binding.statusItem.text = this.operationType
+
+                    binding.statusItem.setBackgroundResource(
+                        StatusEnum.values()
+                            .find { it.statusName == this.operationType }!!.colorItemEnum
+                    )
+                    binding.statusItem.setTextColor(
+                        ContextCompat.getColor(
+                            SapMobileApplication.context,
+                            StatusEnum.values()
+                                .find { it.statusName == this.operationType }!!.textColorEnum
+                        )
+                    )
+                }
+
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventHolder = EventHolder(
-        ItemHistoryBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-    )
+    private inner class LoadMoreViewHolder(private val binding: BottomLoaderRecyclerBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-
-    override fun onBindViewHolder(holder: EventHolder, position: Int) {
-        holder.bind()
+        fun bind() {
+            load?.invoke(absoluteAdapterPosition)
+        }
     }
 
-    fun setClickListener(block: (SimpleData) -> Unit) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            1 -> HistoryViewHolder(
+                ItemHistoryBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
+            else -> {
+                LoadMoreViewHolder(
+                    BottomLoaderRecyclerBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            1 -> (holder as HistoryViewHolder).bind()
+            else -> (holder as LoadMoreViewHolder).bind()
+        }
+    }
+
+
+    fun setClickListener(block: (CashbackHistory) -> Unit) {
         clickListener = block
+    }
+
+    fun loadMore(skipIndex: (Int) -> Unit) {
+        load = skipIndex
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is CashbackHistory -> 1
+            else -> 2
+        }
     }
 
 }

@@ -21,7 +21,8 @@ object Preferences {
     var noPaginationConfigutation: Boolean
         get() = preferences.getBoolean(Preferences::noPaginationConfigutation.name, false)
         set(value) {
-            preferences.edit().putBoolean(Preferences::noPaginationConfigutation.name, value).apply()
+            preferences.edit().putBoolean(Preferences::noPaginationConfigutation.name, value)
+                .apply()
         }
 
     var companyDB: String?
@@ -99,10 +100,10 @@ object Preferences {
             preferences.edit().putString(Preferences::cardName.name, value).apply()
         }
 
-    var returnsPassword: String?
-        get() = preferences.getString(Preferences::returnsPassword.name, null)
+    var userCode: String?
+        get() = preferences.getString(Preferences::userCode.name, null)
         set(value) {
-            preferences.edit().putString(Preferences::returnsPassword.name, value).apply()
+            preferences.edit().putString(Preferences::userCode.name, value).apply()
         }
 
     var intermediaryWhs: String?
@@ -253,7 +254,6 @@ object Preferences {
         set(value) {
             preferences.edit().putString(Preferences::discountByDocTotal.name, value).apply()
         }
-
 
 
 }

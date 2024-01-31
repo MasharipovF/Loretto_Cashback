@@ -6,29 +6,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lorettocashback.data.model.SimpleData
+import com.example.lorettocashback.data.entity.qr_code.CashbackQrCode
 import com.example.lorettocashback.databinding.ItemQrCodeBinding
 
-class QrCodeAdapter : ListAdapter<SimpleData, QrCodeAdapter.EventHolder>(EventDiffUtil) {
+class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(EventDiffUtil) {
 
-    private var clickListener: ((SimpleData) -> Unit)? = null
+    private var clickListener: ((CashbackQrCode) -> Unit)? = null
 
-    object EventDiffUtil : DiffUtil.ItemCallback<SimpleData>() {
+    object EventDiffUtil : DiffUtil.ItemCallback<CashbackQrCode>() {
         override fun areItemsTheSame(
-            oldItem: SimpleData,
-            newItem: SimpleData
+            oldItem: CashbackQrCode,
+            newItem: CashbackQrCode
         ): Boolean {
             return oldItem == newItem
         }
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
-            oldItem: SimpleData,
-            newItem: SimpleData
+            oldItem: CashbackQrCode,
+            newItem: CashbackQrCode
         ): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.itemName == newItem.itemName || oldItem.serialNumber == newItem.serialNumber
         }
-
     }
 
     inner class EventHolder(private val binding: ItemQrCodeBinding) :
@@ -38,14 +37,14 @@ class QrCodeAdapter : ListAdapter<SimpleData, QrCodeAdapter.EventHolder>(EventDi
             binding.root.setOnClickListener {
                 clickListener?.invoke(getItem(absoluteAdapterPosition))
             }
-
         }
 
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
-                binding.textNum.text = this.name
-                binding.textSum.text = this.sum
+                binding.textNum.text = this.itemName
+                binding.textSum.text = this.cashbackAmount.toString()
+
             }
         }
     }
@@ -61,7 +60,7 @@ class QrCodeAdapter : ListAdapter<SimpleData, QrCodeAdapter.EventHolder>(EventDi
         holder.bind()
     }
 
-    fun setClickListener(block: (SimpleData) -> Unit) {
+    fun setClickListener(block: (CashbackQrCode) -> Unit) {
         clickListener = block
     }
 

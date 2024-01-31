@@ -17,10 +17,10 @@ interface LoginInteractor {
     var errorMessage: String?
 }
 
-class LoginInteractorImpl() : LoginInteractor {
+class LoginInteractorImpl : LoginInteractor {
 
     private val repository: LoginRepository by lazy { LoginRepositoryImpl() }
-    private val bpRepository: BpRepository by lazy {BpRepositoryImpl() }
+    private val bpRepository: BpRepository by lazy { BpRepositoryImpl() }
 
     override var errorMessage: String? = null
 
@@ -42,24 +42,25 @@ class LoginInteractorImpl() : LoginInteractor {
             //KLIENT KIRITGAN LOGIN PAROL BOYICHA QIDIRISH KERAK
             val userResponse = bpRepository.getUserData(phone, password)
 
-            if (userResponse is CashbackUsersVal) {
+            return if (userResponse is CashbackUsersVal) {
 
-                if (!userResponse.value.isNullOrEmpty()){
+                if (!userResponse.value.isNullOrEmpty()) {
                     Preferences.cardName = userResponse.value[0].fullName
-                    return userResponse.value[0]
+                    Preferences.userCode = userResponse.value[0].userCode
+                    userResponse.value[0]
                 } else {
                     errorMessage = "Бизнес партнер с кодом $phone не найден!"
-                    return  null
+                    null
                 }
 
             } else {
                 errorMessage = (userResponse as ErrorResponse).error.message.value
-                return null
+                null
             }
 
         } else {
             errorMessage = (response as ErrorResponse).error.message.value
-             return null
+            return null
         }
     }
 }
