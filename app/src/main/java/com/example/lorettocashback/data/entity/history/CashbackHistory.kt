@@ -49,7 +49,7 @@ data class CashbackHistory(
     val serialNumber: String,
 
     @SerializedName("Asllik")
-    val asllik: Any,
+    val asllik: String,
 
     @SerializedName("AbsEntry")
     val absEntry: Int,

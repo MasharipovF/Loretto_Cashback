@@ -9,7 +9,6 @@ import retrofit2.http.*
 interface BusinessPartnersService {
 
     companion object {
-
         fun get(): BusinessPartnersService =
             ServiceBuilder.createService(BusinessPartnersService::class.java)
     }

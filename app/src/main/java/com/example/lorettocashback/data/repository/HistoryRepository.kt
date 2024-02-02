@@ -7,26 +7,37 @@ import com.example.lorettocashback.util.retryIO
 
 interface HistoryRepository {
 
-    suspend fun getUserHistoryAll(): Any?
-
     suspend fun getUserHistory(
-        dateGe: String,
-        dateLe: String
+        dateGe: String?,
+        dateLe: String?,
+        skip: Int?
     ): Any?
 
+
+    suspend fun getTotalSum(logic: Boolean): Any?
 }
+
 class HistoryRepositoryImpl(
     private val hsService: HistoryService = HistoryService.get(),
 ) : HistoryRepository {
 
     private val userCode = Preferences.userCode
-    override suspend fun getUserHistoryAll(): Any? {
+    override suspend fun getUserHistory(dateGe: String?, dateLe: String?, skip: Int?): Any? {
         val response = retryIO {
-            val filterString =
-                "UserCode  eq '$userCode'"
+            var filterString = "UserCode  eq '$userCode'"
+
+            if (dateGe != null) {
+                filterString += " and Date ge '$dateGe'"
+            }
+
+            if (dateLe != null) {
+                filterString += " and Date le '$dateLe'"
+            }
+
 
             hsService.getUserHistoryData(
-                filter = filterString
+                filter = filterString,
+                skipValue = skip
             )
         }
         return if (response.isSuccessful) {
@@ -36,14 +47,25 @@ class HistoryRepositoryImpl(
         }
     }
 
-    override suspend fun getUserHistory(dateGe: String, dateLe: String): Any? {
+    override suspend fun getTotalSum(logic: Boolean): Any? {
         val response = retryIO {
-            val filterString =
-                "UserCode  eq '$userCode'  and Date ge '$dateGe' and Date le '$dateLe'"
+            val applyGroupBy = "groupby((OperationType))"
+            val applyAggregate = "aggregate(CashbackAmount with sum as CashbackAmount )"
+            val filter = "OperationType eq 'WITHDREW'"
 
-            hsService.getUserHistoryData(
-                filter = filterString
-            )
+            if (logic) {
+                hsService.getTotalSum(
+                    applyGroupBy = applyGroupBy,
+                    applyAggregate = applyAggregate,
+                    filter = filter
+                )
+            } else {
+                hsService.getTotalSum(
+                    applyGroupBy = null,
+                    applyAggregate = applyAggregate,
+                    filter = null
+                )
+            }
         }
         return if (response.isSuccessful) {
             response.body()
@@ -51,5 +73,4 @@ class HistoryRepositoryImpl(
             ErrorUtils.errorProcess(response)
         }
     }
-
 }

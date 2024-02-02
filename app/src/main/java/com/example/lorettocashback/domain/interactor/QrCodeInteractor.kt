@@ -31,7 +31,7 @@ class QrCodeInteractorImpl() : QrCodeInteractor {
             if (!response.value.isNullOrEmpty()) {
                 response.value[0]
             } else {
-                errorMessage = "Бизнес партнер с кодом $serialNumber не найден!"
+                errorMessage = " $serialNumber не найден!"
                 null
             }
 

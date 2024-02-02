@@ -51,6 +51,7 @@ class HistoryAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(EventDiffUtil) 
 
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
@@ -58,7 +59,7 @@ class HistoryAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(EventDiffUtil) 
 
                     binding.itemName.text = this.itemName
                     binding.textDate.text = this.date
-                    binding.cashbackAmount.text = this.cashbackAmount.toString()
+                    binding.cashbackAmount.text = this.cashbackAmount.toString()+"$"
                     binding.statusItem.text = this.operationType
 
                     binding.statusItem.setBackgroundResource(

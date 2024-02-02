@@ -12,6 +12,7 @@ import com.example.lorettocashback.databinding.ItemQrCodeBinding
 class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(EventDiffUtil) {
 
     private var clickListener: ((CashbackQrCode) -> Unit)? = null
+    private var deleteClickListener: ((CashbackQrCode) -> Unit)? = null
 
     object EventDiffUtil : DiffUtil.ItemCallback<CashbackQrCode>() {
         override fun areItemsTheSame(
@@ -37,13 +38,17 @@ class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(Eve
             binding.root.setOnClickListener {
                 clickListener?.invoke(getItem(absoluteAdapterPosition))
             }
+            binding.deleteBtn.setOnClickListener {
+                deleteClickListener?.invoke(getItem(absoluteAdapterPosition))
+            }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind() {
             getItem(absoluteAdapterPosition).apply {
 
                 binding.textNum.text = this.itemName
-                binding.textSum.text = this.cashbackAmount.toString()
+                binding.textSum.text = this.cashbackAmount.toString()+"$"
 
             }
         }
@@ -62,6 +67,10 @@ class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(Eve
 
     fun setClickListener(block: (CashbackQrCode) -> Unit) {
         clickListener = block
+    }
+
+    fun setDeleteClickListener(block: (CashbackQrCode) -> Unit) {
+        deleteClickListener = block
     }
 
 }

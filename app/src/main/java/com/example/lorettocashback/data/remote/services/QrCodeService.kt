@@ -16,7 +16,7 @@ interface QrCodeService {
             ServiceBuilder.createService(QrCodeService::class.java)
     }
 
-    @GET("sml.svc/CASHBACK_HISTORY")
+    @GET("sml.svc/CASHBACK_ELIGIBLE_ITEMS")
     suspend fun getUserQrCodeData(
         @Header("B1S-CaseInsensitive") caseInsensitive: Boolean = true,
         @Query("\$filter") filter: String? = null,

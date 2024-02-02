@@ -1,5 +1,7 @@
 package com.example.lorettocashback.domain.interactor
 
+import com.example.lorettocashback.data.entity.history.CashbackAmount
+import com.example.lorettocashback.data.entity.history.CashbackAmountVal
 import com.example.lorettocashback.data.entity.history.CashbackHistory
 import com.example.lorettocashback.data.entity.history.CashbackHistoryVal
 import com.example.lorettocashback.data.repository.HistoryRepository
@@ -7,13 +9,17 @@ import com.example.lorettocashback.data.repository.HistoryRepositoryImpl
 import com.example.lorettocashback.domain.dto.error.ErrorResponse
 
 interface HistoryInteractor {
-    suspend fun getUserHistoryAll(): List<CashbackHistory>?
     suspend fun getUserHistory(
-        dateGe: String,
-        dateLe: String
+        dateGe: String?,
+        dateLe: String?,
+        skip: Int?
     ): List<CashbackHistory>?
 
+    suspend fun getTotalSum(logic: Boolean): CashbackAmount?
+
+
     var errorMessage: String?
+    var errorMessageSum: String?
 }
 
 class HistoryInteractorImpl() : HistoryInteractor {
@@ -21,9 +27,14 @@ class HistoryInteractorImpl() : HistoryInteractor {
     private val hsRepository: HistoryRepository by lazy { HistoryRepositoryImpl() }
 
     override var errorMessage: String? = null
-    override suspend fun getUserHistoryAll(): List<CashbackHistory> {
+    override var errorMessageSum: String? = null
+    override suspend fun getUserHistory(
+        dateGe: String?,
+        dateLe: String?,
+        skip: Int?
+    ): List<CashbackHistory> {
 
-        val response = hsRepository.getUserHistoryAll()
+        val response = hsRepository.getUserHistory(dateGe = dateGe, dateLe = dateLe, skip)
 
         return if (response is CashbackHistoryVal) {
 
@@ -41,27 +52,21 @@ class HistoryInteractorImpl() : HistoryInteractor {
 
     }
 
-    override suspend fun getUserHistory(
-        dateGe: String,
-        dateLe: String
-    ): List<CashbackHistory> {
+    override suspend fun getTotalSum(logic: Boolean): CashbackAmount? {
+        val response = hsRepository.getTotalSum(logic)
 
-        val response =
-            hsRepository.getUserHistory(dateGe = dateGe, dateLe = dateLe)
-
-        return if (response is CashbackHistoryVal) {
+        return if (response is CashbackAmountVal) {
 
             if (!response.value.isNullOrEmpty()) {
-                response.value
+                response.value[0]
             } else {
-                errorMessage = "EMPTY"
-                emptyList()
+                errorMessageSum = "EMPTY"
+                null
             }
 
         } else {
-            errorMessage = (response as ErrorResponse).error.message.value
-            emptyList()
+            errorMessageSum = (response as ErrorResponse).error.message.value
+            null
         }
-
     }
 }

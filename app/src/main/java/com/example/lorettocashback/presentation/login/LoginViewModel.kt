@@ -22,7 +22,6 @@ class LoginViewModel : BaseViewModel() {
 
             val mLoggedUser = interactor.requestLogin(phone, password)
 
-
             if (mLoggedUser != null) {
                 loggedUser.postValue(mLoggedUser)
             } else {

@@ -4,17 +4,14 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.graphics.Rect
-import android.graphics.RectF
-import android.icu.util.Calendar
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -31,11 +28,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lorettocashback.R
 import com.example.lorettocashback.core.BaseActivity
 import com.example.lorettocashback.data.entity.qr_code.CashbackQrCode
-import com.example.lorettocashback.data.model.SimpleData
 import com.example.lorettocashback.databinding.ActivityQrCodeBinding
-import com.example.lorettocashback.presentation.SapMobileApplication
+import com.example.lorettocashback.databinding.DialogHistoryBinding
+import com.example.lorettocashback.databinding.DialogQrCodeBinding
 import com.example.lorettocashback.presentation.adapter.QrCodeAdapter
-import com.example.lorettocashback.presentation.history.HistoryViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -44,11 +40,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 class QrCodeActivity : BaseActivity() {
 
@@ -72,6 +65,7 @@ class QrCodeActivity : BaseActivity() {
     private lateinit var barcodeScanner: BarcodeScanner
 
     private lateinit var list: ArrayList<CashbackQrCode>
+    private lateinit var find: MediaPlayer
 
 
     override fun init(savedInstanceState: Bundle?) {
@@ -83,16 +77,8 @@ class QrCodeActivity : BaseActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         barcodeScanner = createBarcodeScanner()
         list = ArrayList()
+        find = MediaPlayer.create(this, R.raw.correct);
         rvAdapter = QrCodeAdapter()
-
-        rvAdapter.setClickListener {
-            val view: View = LayoutInflater.from(this).inflate(R.layout.dialog_qr_code, null)
-            val dialog = AlertDialog.Builder(this)
-                .setView(view)
-                .create()
-            dialog.show()
-            dialog.window!!.setBackgroundDrawable(null)
-        }
 
         binding.list.adapter = rvAdapter
         binding.list.layoutManager = LinearLayoutManager(
@@ -100,24 +86,70 @@ class QrCodeActivity : BaseActivity() {
             RecyclerView.VERTICAL,
             false
         )
-
+        onClick()
 
         mViewModel.data.observe(this, dataObserve)
         mViewModel.listData.observe(this, listDataObserve)
-
+        mViewModel.loading.observe(this, loadingObserve)
+        mViewModel.errorData.observe(this, errorDataObserve)
 
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun onClick() {
+        rvAdapter.setClickListener { data ->
+            val view: View = LayoutInflater.from(this).inflate(R.layout.dialog_qr_code, null)
+
+            val binding = DialogQrCodeBinding.bind(view)
+            binding.itemNameDg.text = data.itemName
+            binding.cashbackAmountDg.text = data.cashbackAmount.toString() + "$"
+            binding.itemGroupNameDg.text = data.itemsGroupName
+            binding.itemCodeTextDg.text = data.itemCode
+
+            val dialog = AlertDialog.Builder(this)
+                .setView(view)
+                .create()
+            dialog.show()
+            dialog.window!!.setBackgroundDrawable(null)
+
+            binding.deleteBtn.setOnClickListener {
+                list.remove(data)
+                mViewModel.getDataList(list)
+                dialog.dismiss()
+            }
+        }
+
+        rvAdapter.setDeleteClickListener {
+            list.remove(it)
+            mViewModel.getDataList(list)
+        }
+    }
+
     private val dataObserve = Observer<CashbackQrCode> {
-        Log.d("DATAGGG", "$it")
-        //list.add(it)
-        mViewModel.getDataList(it)
+        list.add(it)
+        mViewModel.getDataList(list)
+        find.start()
     }
 
     private val listDataObserve = Observer<List<CashbackQrCode>> {
         rvAdapter.submitList(it)
+        rvAdapter.notifyDataSetChanged()
+    }
 
+    private val loadingObserve = Observer<Boolean> {
+        if (it) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
+    }
 
+    private val errorDataObserve = Observer<String> {
+        showSnackbar(
+            binding.container,
+            "Ошибка $it",
+            R.color.red
+        )
     }
 
     private fun permission() {
@@ -165,7 +197,7 @@ class QrCodeActivity : BaseActivity() {
                     .build()
                 imageAnalysis.setAnalyzer(
                     cameraExecutor,
-                    BarcodeAnalyzer(mViewModel, barcodeScanner, binding.scView)
+                    BarcodeAnalyzer(mViewModel, barcodeScanner)
                 )
 
                 cameraProvider.unbindAll()
@@ -184,7 +216,6 @@ class QrCodeActivity : BaseActivity() {
                     "Ошибка $e",
                     R.color.red
                 )
-                Log.e("QrCodeActivity7", "Kamera ni boshlashda xatolik", e)
             }
         }, ContextCompat.getMainExecutor(this))
     }
@@ -215,10 +246,11 @@ class QrCodeActivity : BaseActivity() {
 class BarcodeAnalyzer(
     private val mViewModel: QrCodeViewModel,
     private val barcodeScanner: BarcodeScanner,
-    private val scView: View
 ) : ImageAnalysis.Analyzer {
 
     val scope = CoroutineScope(Dispatchers.Main)
+
+    var time = 0L
 
     @SuppressLint("UnsafeOptInUsageError")
     override fun analyze(imageProxy: ImageProxy) {
@@ -230,16 +262,17 @@ class BarcodeAnalyzer(
                 .addOnSuccessListener { barcodes ->
                     if (barcodes.isNotEmpty()) {
                         for (barcode in barcodes) {
-
                             val value = barcode.displayValue
-                            val barcodeBoundingBox = barcode.boundingBox
-
-                            Log.d("PSP", "$value")
-                            if (barcode.format == Barcode.FORMAT_CODE_128 || barcode.format == Barcode.FORMAT_QR_CODE) {
-                                Log.d("OOII", "$value")
+                            if (time == 0L) {
                                 mViewModel.getData(value.toString())
+                                time = SystemClock.elapsedRealtime()
+                            } else {
+                                val currentTime = SystemClock.elapsedRealtime()
+                                if (currentTime - time >= 3000) {
+                                    mViewModel.getData(value.toString())
+                                    time = currentTime
+                                }
                             }
-
                         }
                     } else {
                         Log.d("BarcodeAnalyzer", "barcode topilmadi")
