@@ -14,7 +14,10 @@ interface HistoryRepository {
     ): Any?
 
 
-    suspend fun getTotalSum(logic: Boolean): Any?
+    suspend fun getTotalSum(
+        dateFrom: String?,
+        dateTo: String?
+    ): Any?
 }
 
 class HistoryRepositoryImpl(
@@ -47,25 +50,27 @@ class HistoryRepositoryImpl(
         }
     }
 
-    override suspend fun getTotalSum(logic: Boolean): Any? {
+    override suspend fun getTotalSum(dateFrom: String?, dateTo: String?): Any? {
         val response = retryIO {
             val applyGroupBy = "groupby((OperationType))"
-            val applyAggregate = "aggregate(CashbackAmount with sum as CashbackAmount )"
-            val filter = "OperationType eq 'WITHDREW'"
+            val applyAggregate = "aggregate(CashbackAmount with sum as CashbackAmount)"
 
-            if (logic) {
-                hsService.getTotalSum(
-                    applyGroupBy = applyGroupBy,
-                    applyAggregate = applyAggregate,
-                    filter = filter
-                )
-            } else {
-                hsService.getTotalSum(
-                    applyGroupBy = null,
-                    applyAggregate = applyAggregate,
-                    filter = null
-                )
+            var filterString = "UserCode  eq '$userCode'"
+
+            if (dateFrom != null) {
+                filterString += " and Date ge '$dateFrom'"
             }
+
+            if (dateTo != null) {
+                filterString += " and Date le '$dateTo'"
+            }
+
+
+            hsService.getTotalSum(
+                applyGroupBy = applyGroupBy,
+                applyAggregate = applyAggregate,
+                filter = filterString
+            )
         }
         return if (response.isSuccessful) {
             response.body()

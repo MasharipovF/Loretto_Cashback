@@ -15,7 +15,10 @@ interface HistoryInteractor {
         skip: Int?
     ): List<CashbackHistory>?
 
-    suspend fun getTotalSum(logic: Boolean): CashbackAmount?
+    suspend fun getTotalSum(
+        dateFrom: String?,
+        dateTo: String?
+    ): List<CashbackAmount>?
 
 
     var errorMessage: String?
@@ -37,8 +40,7 @@ class HistoryInteractorImpl() : HistoryInteractor {
         val response = hsRepository.getUserHistory(dateGe = dateGe, dateLe = dateLe, skip)
 
         return if (response is CashbackHistoryVal) {
-
-            if (!response.value.isNullOrEmpty()) {
+            if (response.value.isNotEmpty()) {
                 response.value
             } else {
                 errorMessage = "EMPTY"
@@ -52,13 +54,15 @@ class HistoryInteractorImpl() : HistoryInteractor {
 
     }
 
-    override suspend fun getTotalSum(logic: Boolean): CashbackAmount? {
-        val response = hsRepository.getTotalSum(logic)
+    override suspend fun getTotalSum(
+        dateFrom: String?,
+        dateTo: String?
+    ): List<CashbackAmount>? {
+        val response = hsRepository.getTotalSum(dateFrom, dateTo)
 
         return if (response is CashbackAmountVal) {
-
-            if (!response.value.isNullOrEmpty()) {
-                response.value[0]
+            if (response.value.isNotEmpty()) {
+                response.value
             } else {
                 errorMessageSum = "EMPTY"
                 null

@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lorettocashback.R
 import com.example.lorettocashback.core.BaseActivity
-import com.example.lorettocashback.data.entity.history.CashbackAmount
+import com.example.lorettocashback.core.GeneralConsts
 import com.example.lorettocashback.data.model.StatusEnum
 import com.example.lorettocashback.databinding.ActivityHistoryBinding
 import com.example.lorettocashback.databinding.DialogHistoryBinding
 import com.example.lorettocashback.presentation.SapMobileApplication
 import com.example.lorettocashback.presentation.adapter.HistoryAdapter
+import com.example.lorettocashback.util.Utils
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -63,18 +64,17 @@ class HistoryActivity : BaseActivity() {
         }
 
         binding.cancelBnt.setOnClickListener {
-            mViewModel.clickCancelFun()
+            restoreDefaultDates()
         }
 
-        mViewModel.textDateDe.observe(this, textDateDeObserve)
-        mViewModel.textDateLe.observe(this, textDateLeObserve)
-        mViewModel.clickCancel.observe(this, clickCancelObserve)
+        mViewModel.dateFrom.observe(this, textDateDeObserve)
+        mViewModel.dateTo.observe(this, textDateLeObserve)
         mViewModel.listData.observe(this, listDataObserve)
         mViewModel.loading.observe(this, loadingObserve)
         mViewModel.errorData.observe(this, errorDataObserve)
         mViewModel.errorDataSum.observe(this, errorDataObserve)
         mViewModel.cashbackDataWithdrew.observe(this, cashbackDataWithdrewObserve)
-        mViewModel.cashbackDataAll.observe(this, cashbackDataAllObserve)
+        mViewModel.cashbackDataGain.observe(this, cashbackDataAllObserve)
 
     }
 
@@ -93,13 +93,14 @@ class HistoryActivity : BaseActivity() {
 
             binding.itemStatusDg.setBackgroundResource(
                 StatusEnum.values()
-                    .find { it.statusName == data.operationType }!!.colorItemEnum
+                    .find { it.statusName == data.operationType }?.colorItemEnum ?: 0
             )
+
             binding.itemStatusDg.setTextColor(
                 ContextCompat.getColor(
                     SapMobileApplication.context,
                     StatusEnum.values()
-                        .find { it.statusName == data.operationType }!!.textColorEnum
+                        .find { it.statusName == data.operationType }?.textColorEnum ?: 0
                 )
             )
 
@@ -111,7 +112,7 @@ class HistoryActivity : BaseActivity() {
         }
 
         rvAdapter.loadMore {
-            mViewModel.listDateQuery(it)
+            mViewModel.listDateQuery(skip = it)
         }
     }
 
@@ -125,7 +126,7 @@ class HistoryActivity : BaseActivity() {
         ).show()
     }
 
-    private fun updateLabel(myCalendar: Calendar, textView: TextView) {
+    private fun updateDateLabels(myCalendar: Calendar, textView: TextView) {
         val myFormat = "yyyy-MM-dd"
         val sdf = SimpleDateFormat(myFormat, Locale.US)
 
@@ -135,7 +136,8 @@ class HistoryActivity : BaseActivity() {
             mViewModel.textDateLeFun(sdf.format(myCalendar.time))
         }
 
-        if (binding.textDataC.text.toString() != "Выбирать ..." && binding.textDataPo.text.toString() == "Выбирать ...") {
+
+        /*if (binding.textDataC.text.toString() != "Выбирать ..." && binding.textDataPo.text.toString() == "Выбирать ...") {
             mViewModel.listDateQuery(
                 dateDe = binding.textDataC.text.toString()
             )
@@ -152,7 +154,7 @@ class HistoryActivity : BaseActivity() {
                 dateDe = binding.textDataC.text.toString(),
                 dateLe = binding.textDataPo.text.toString()
             )
-        }
+        }*/
 
     }
 
@@ -164,31 +166,41 @@ class HistoryActivity : BaseActivity() {
             myCalendar.set(Calendar.YEAR, year)
             myCalendar.set(Calendar.MONTH, month)
             myCalendar.set(Calendar.DAY_OF_MONTH, day)
-            updateLabel(myCalendar, textView)
+            updateDateLabels(myCalendar, textView)
         }
     }
 
     private val textDateDeObserve = Observer<String> {
-        binding.textDataC.text = it
+        if (it != null) {
+            binding.textDataC.text = Utils.convertUSAdatetoNormal(it)
+        } else {
+            binding.textDataC.text = GeneralConsts.EMPTY_STRING
+        }
+        mViewModel.listDateQuery()
     }
 
     private val textDateLeObserve = Observer<String> {
-        binding.textDataPo.text = it
+        if (it != null) {
+            binding.textDataPo.text = Utils.convertUSAdatetoNormal(it)
+        } else {
+            binding.textDataPo.text = GeneralConsts.EMPTY_STRING
+        }
+        mViewModel.listDateQuery()
+
     }
+
 
     private val listDataObserve = Observer<List<Any>> { listData ->
         rvAdapter.submitList(listData)
     }
 
-    private val clickCancelObserve = Observer<Unit> {
-        if (binding.textDataC.text != "Выбирать ..." || binding.textDataPo.text != "Выбирать ...") {
-            myCalendar.set(Calendar.YEAR, myCalendar1.get(Calendar.YEAR))
-            myCalendar.set(Calendar.MONTH, myCalendar1.get(Calendar.MONTH))
-            myCalendar.set(Calendar.DAY_OF_MONTH, myCalendar1.get(Calendar.DAY_OF_MONTH))
-            binding.textDataC.text = "Выбирать ..."
-            binding.textDataPo.text = "Выбирать ..."
-            mViewModel.listDateQuery()
-        }
+    private fun restoreDefaultDates() {
+        myCalendar.set(Calendar.YEAR, myCalendar1.get(Calendar.YEAR))
+        myCalendar.set(Calendar.MONTH, myCalendar1.get(Calendar.MONTH))
+        myCalendar.set(Calendar.DAY_OF_MONTH, myCalendar1.get(Calendar.DAY_OF_MONTH))
+        mViewModel.dateTo.value = null
+        mViewModel.dateFrom.value = null
+
     }
 
 
@@ -209,13 +221,13 @@ class HistoryActivity : BaseActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private val cashbackDataWithdrewObserve = Observer<CashbackAmount> {
-        binding.textWithDrew.text = it.cashbackAmount.toString() + "$"
+    private val cashbackDataWithdrewObserve = Observer<Double> {
+        binding.textWithDrew.text = Utils.getNumberWithThousandSeparator(it) + "$"
     }
 
     @SuppressLint("SetTextI18n")
-    private val cashbackDataAllObserve = Observer<CashbackAmount> {
-        binding.textTotalSum.text = it.cashbackAmount.toString() + "$"
+    private val cashbackDataAllObserve = Observer<Double> {
+        binding.textTotalSum.text = Utils.getNumberWithThousandSeparator(it) + "$"
     }
 
 }

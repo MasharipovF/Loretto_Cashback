@@ -69,7 +69,6 @@
     <string name="b_2_c">B 2 C</string>
     <string name="b_2_b">B 2 B</string>
     <string name="statistics">STATISTIKA</string>
-    <string name="choose">Tanlang …</string>
     <string name="date_to">…gacha</string>
     <string name="date_from">…dan</string>
     <string name="quantity">Soni</string>
@@ -82,6 +81,8 @@
 
     <string name="dialog_adddoc_title">Hujjatni qo\'shish</string>
     <string name="dialog_adddoc_message">Hujjatni qo\'shishni xohlaysizmi ??</string>
+
+    <string name="choose">Выберите…</string>
     <!-- SAVE TO STORAGE -->
 
 

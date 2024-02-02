@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.lorettocashback.core.BaseViewModel
 import com.example.lorettocashback.core.GeneralConsts
-import com.example.lorettocashback.data.entity.history.CashbackAmount
+import com.example.lorettocashback.data.model.StatusEnum
 import com.example.lorettocashback.domain.interactor.HistoryInteractor
 import com.example.lorettocashback.domain.interactor.HistoryInteractorImpl
 import com.example.lorettocashback.util.LoadMore
@@ -15,33 +15,31 @@ class HistoryViewModel : BaseViewModel() {
     private val hsInteractor: HistoryInteractor by lazy { HistoryInteractorImpl() }
 
     var listData: MutableLiveData<List<Any>> = MutableLiveData()
-    var textDateDe: MutableLiveData<String> = MutableLiveData()
-    var textDateLe: MutableLiveData<String> = MutableLiveData()
-    var clickCancel: MutableLiveData<Unit> = MutableLiveData()
+    var dateFrom: MutableLiveData<String> = MutableLiveData()
+    var dateTo: MutableLiveData<String> = MutableLiveData()
     var errorData: MutableLiveData<String> = MutableLiveData()
     var errorDataSum: MutableLiveData<String> = MutableLiveData()
-    var cashbackDataWithdrew: MutableLiveData<CashbackAmount> = MutableLiveData()
-    var cashbackDataAll: MutableLiveData<CashbackAmount> = MutableLiveData()
+    var cashbackDataWithdrew: MutableLiveData<Double> = MutableLiveData()
+    var cashbackDataGain: MutableLiveData<Double> = MutableLiveData()
 
     var loading: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        cashback()
+
     }
 
     fun textDateDeFun(text: String) {
-        textDateDe.value = text
+        dateFrom.value = text
     }
 
     fun textDateLeFun(text: String) {
-        textDateLe.value = text
+        dateTo.value = text
     }
 
-    fun clickCancelFun() {
-        clickCancel.value = Unit
-    }
 
-    fun listDateQuery(skip: Int = 0, dateDe: String? = null, dateLe: String? = null) {
+    fun listDateQuery(skip: Int = 0) {
+        cashback()
+
         vmScope.launch {
             if (skip == 0) {
                 loading.postValue(true)
@@ -52,10 +50,12 @@ class HistoryViewModel : BaseViewModel() {
             }
 
             val mGetUserHistory = hsInteractor.getUserHistory(
-                dateGe = dateDe,
-                dateLe = dateLe,
+                dateGe = dateFrom.value,
+                dateLe = dateTo.value,
                 skip
             )
+
+            Log.d("HISTORY", mGetUserHistory.toString())
 
             if (mGetUserHistory != null) {
 
@@ -73,22 +73,31 @@ class HistoryViewModel : BaseViewModel() {
     }
 
     fun cashback() {
-
         vmScope.launch {
-            val mCashbackWithdrew = hsInteractor.getTotalSum(true)
-            val mCashbackAll = hsInteractor.getTotalSum(false)
-
-            if (mCashbackWithdrew != null) {
-                cashbackDataWithdrew.postValue(mCashbackWithdrew)
-            } else {
-//                errorDataSum.postValue(hsInteractor.errorMessageSum)
-            }
+            val mCashbackAll = hsInteractor.getTotalSum(
+                dateFrom = dateFrom.value,
+                dateTo = dateTo.value
+            )
 
             if (mCashbackAll != null) {
-                cashbackDataAll.postValue(mCashbackAll)
+
+                var gained = 0.0
+                var withdraw = 0.0
+
+                mCashbackAll.forEach {
+                    if (it.operationType == StatusEnum.WITHDRAW.statusName) {
+                        withdraw += it.cashbackAmount
+                    } else {
+                        gained += it.cashbackAmount
+                    }
+                }
+                cashbackDataWithdrew.postValue(withdraw)
+                cashbackDataGain.postValue(gained)
+
             } else {
                 errorDataSum.postValue(hsInteractor.errorMessageSum)
             }
+
         }
     }
 }
