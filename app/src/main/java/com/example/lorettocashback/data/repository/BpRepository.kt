@@ -9,7 +9,7 @@ import com.example.lorettocashback.util.retryIO
 
 interface BpRepository {
 
-    suspend fun getUserData(phone: String, password: String): Any? //BusinessPartners?
+    suspend fun getUserData(phone: String?, password: String?): Any? //BusinessPartners?
 
 }
 
@@ -17,7 +17,7 @@ class BpRepositoryImpl(
     private val bpService: BusinessPartnersService = BusinessPartnersService.get(),
 ) :
     BpRepository {
-    override suspend fun getUserData(phone: String, password: String): Any? {
+    override suspend fun getUserData(phone: String?, password: String?): Any? {
         val response = retryIO {
             val filterString = "Password eq '$password' and contains(Phone, '$phone')"
 

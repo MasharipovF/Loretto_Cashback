@@ -1,12 +1,17 @@
-package com.example.lorettocashback.presentation.qr_code
+package com.example.lorettocashback.presentation.screens.qr_code
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +37,7 @@ import com.example.lorettocashback.databinding.ActivityQrCodeBinding
 import com.example.lorettocashback.databinding.DialogHistoryBinding
 import com.example.lorettocashback.databinding.DialogQrCodeBinding
 import com.example.lorettocashback.presentation.adapter.QrCodeAdapter
+import com.example.lorettocashback.util.Utils
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -66,8 +72,7 @@ class QrCodeActivity : BaseActivity() {
 
     private lateinit var list: ArrayList<CashbackQrCode>
     private lateinit var find: MediaPlayer
-
-
+    private lateinit var vibrator: Vibrator
     override fun init(savedInstanceState: Bundle?) {
         binding = ActivityQrCodeBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -77,7 +82,8 @@ class QrCodeActivity : BaseActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         barcodeScanner = createBarcodeScanner()
         list = ArrayList()
-        find = MediaPlayer.create(this, R.raw.correct);
+        find = MediaPlayer.create(this, R.raw.correct)
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         rvAdapter = QrCodeAdapter()
 
         binding.list.adapter = rvAdapter
@@ -102,7 +108,8 @@ class QrCodeActivity : BaseActivity() {
 
             val binding = DialogQrCodeBinding.bind(view)
             binding.itemNameDg.text = data.itemName
-            binding.cashbackAmountDg.text = data.cashbackAmount.toString() + "$"
+            binding.cashbackAmountDg.text =
+                Utils.getNumberWithThousandSeparator(data.cashbackAmount) + "$"
             binding.itemGroupNameDg.text = data.itemsGroupName
             binding.itemCodeTextDg.text = data.itemCode
 
@@ -139,8 +146,12 @@ class QrCodeActivity : BaseActivity() {
     private val loadingObserve = Observer<Boolean> {
         if (it) {
             binding.progressBar.visibility = View.VISIBLE
+            binding.textLoading.visibility = View.VISIBLE
+            binding.image.setBackgroundColor(Color.parseColor("#72FFFFFF"))
         } else {
             binding.progressBar.visibility = View.GONE
+            binding.textLoading.visibility = View.GONE
+            binding.image.setBackgroundColor(Color.parseColor("#00FFFFFF"))
         }
     }
 
@@ -150,6 +161,13 @@ class QrCodeActivity : BaseActivity() {
             "Ошибка $it",
             R.color.red
         )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrationEffect =
+                VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+            vibrator.vibrate(vibrationEffect)
+        } else {
+            vibrator.vibrate(100)
+        }
     }
 
     private fun permission() {
@@ -231,10 +249,8 @@ class QrCodeActivity : BaseActivity() {
             override fun onAnimationRepeat(animation: Animation) {
             }
         })
-        animation.duration = 2000
         binding.bar.visibility = View.VISIBLE
         binding.bar.startAnimation(animation)
-
     }
 
     override fun onDestroy() {

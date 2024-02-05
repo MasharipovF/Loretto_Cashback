@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.main
+package com.example.lorettocashback.presentation.screens.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,12 +7,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.lorettocashback.core.BaseActivity
 import com.example.lorettocashback.core.GeneralConsts
+import com.example.lorettocashback.data.Preferences
 import com.example.lorettocashback.data.entity.businesspartners.CashbackUsers
 import com.example.lorettocashback.databinding.ActivityMainBinding
-import com.example.lorettocashback.presentation.history.HistoryActivity
-import com.example.lorettocashback.presentation.login.LoginActivity
-import com.example.lorettocashback.presentation.notification.NotificationActivity
-import com.example.lorettocashback.presentation.qr_code.QrCodeActivity
+import com.example.lorettocashback.presentation.screens.history.HistoryActivity
+import com.example.lorettocashback.presentation.screens.login.LoginActivity
+import com.example.lorettocashback.presentation.screens.notification.NotificationActivity
+import com.example.lorettocashback.presentation.screens.qr_code.QrCodeActivity
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.*
 
@@ -63,6 +64,7 @@ class MainActivity : BaseActivity() {
     }
 
     private val exitScreenObserver = Observer<Unit> {
+        Preferences.pinCode = null
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

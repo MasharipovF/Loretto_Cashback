@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.notification
+package com.example.lorettocashback.presentation.screens.notification
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

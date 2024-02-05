@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_background"
-    tools:context=".presentation.qr_code.QrCodeActivity">
+    tools:context=".presentation.screens.qr_code.QrCodeActivity">
 
     <androidx.camera.view.PreviewView
         android:id="@+id/scaner"
@@ -19,7 +19,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#8B000000"
+        android:background="#7C000000"
         app:layout_constraintBottom_toTopOf="@id/scView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#8B000000"
+        android:background="#7C000000"
         app:layout_constraintBottom_toBottomOf="@id/scView"
         app:layout_constraintEnd_toStartOf="@id/scView"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#8B000000"
+        android:background="#7C000000"
         app:layout_constraintBottom_toBottomOf="@id/scView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/scView"
@@ -46,7 +46,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#8B000000"
+        android:background="#7C000000"
         app:layout_constraintBottom_toBottomOf="@id/scaner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="25dp"
+        android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="@id/scaner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,10 +77,22 @@
         <View
             android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="1.5dp"
+            android:layout_height="0.7dp"
             android:background="@color/red"
             android:visibility="gone" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textColor="@color/red"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/scaner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"

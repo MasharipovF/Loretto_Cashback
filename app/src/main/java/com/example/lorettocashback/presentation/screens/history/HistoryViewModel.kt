@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.history
+package com.example.lorettocashback.presentation.screens.history
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

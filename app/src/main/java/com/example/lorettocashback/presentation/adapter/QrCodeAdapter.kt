@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lorettocashback.data.entity.qr_code.CashbackQrCode
 import com.example.lorettocashback.databinding.ItemQrCodeBinding
+import com.example.lorettocashback.util.Utils
 
 class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(EventDiffUtil) {
 
@@ -48,7 +49,9 @@ class QrCodeAdapter : ListAdapter<CashbackQrCode, QrCodeAdapter.EventHolder>(Eve
             getItem(absoluteAdapterPosition).apply {
 
                 binding.textNum.text = this.itemName
-                binding.textSum.text = this.cashbackAmount.toString()+"$"
+                binding.serialNumber.text = this.serialNumber
+                binding.textSum.text =
+                    Utils.getNumberWithThousandSeparator(this.cashbackAmount) + "$"
 
             }
         }

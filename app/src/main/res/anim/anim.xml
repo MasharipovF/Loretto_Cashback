@@ -5,7 +5,7 @@
     <translate
         android:fromYDelta="0%p"
         android:toYDelta="100%p"
-        android:duration="1000"
+        android:duration="2500"
         android:repeatCount="infinite"
         android:repeatMode="restart"
         />

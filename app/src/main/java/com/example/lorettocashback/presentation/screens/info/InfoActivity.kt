@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.info
+package com.example.lorettocashback.presentation.screens.info
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

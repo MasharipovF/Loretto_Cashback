@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.main
+package com.example.lorettocashback.presentation.screens.main
 
 import androidx.lifecycle.MutableLiveData
 import com.example.lorettocashback.core.BaseViewModel

@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.qr_code
+package com.example.lorettocashback.presentation.screens.qr_code
 
 import androidx.lifecycle.MutableLiveData
 import com.example.lorettocashback.core.BaseViewModel

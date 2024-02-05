@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Loretto Cashback</string>
     <string name="app_version">Versiya: %s</string>
     <string name="loginHint">Login</string>
@@ -81,6 +81,9 @@
 
     <string name="dialog_adddoc_title">Hujjatni qo\'shish</string>
     <string name="dialog_adddoc_message">Hujjatni qo\'shishni xohlaysizmi ??</string>
+    <string name="simple">shgdvhsg</string>
+    <string name="create_pin_code">Создайте PIN-код</string>
+    <string name="re_enter_pin_code">Повторно введите свой PIN-код</string>
 
     <string name="choose">Выберите…</string>
     <!-- SAVE TO STORAGE -->

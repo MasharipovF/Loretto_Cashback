@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.login
+package com.example.lorettocashback.presentation.screens.login
 
 import androidx.lifecycle.MutableLiveData
 import com.example.lorettocashback.domain.interactor.LoginInteractor

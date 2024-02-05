@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_background"
-    tools:context=".presentation.notification.NotificationActivity">
+    tools:context=".presentation.screens.notification.NotificationActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"

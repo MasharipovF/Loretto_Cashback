@@ -94,11 +94,18 @@ object Preferences {
             preferences.edit().putString(Preferences::defaultWhs.name, value).apply()
         }
 
-    var cardName: String?
-        get() = preferences.getString(Preferences::cardName.name, null)
+    var phoneNumber: String?
+        get() = preferences.getString(Preferences::phoneNumber.name, null)
         set(value) {
-            preferences.edit().putString(Preferences::cardName.name, value).apply()
+            preferences.edit().putString(Preferences::phoneNumber.name, value).apply()
         }
+
+    var password: String?
+        get() = preferences.getString(Preferences::password.name, null)
+        set(value) {
+            preferences.edit().putString(Preferences::password.name, value).apply()
+        }
+
 
     var userCode: String?
         get() = preferences.getString(Preferences::userCode.name, null)
@@ -106,10 +113,10 @@ object Preferences {
             preferences.edit().putString(Preferences::userCode.name, value).apply()
         }
 
-    var intermediaryWhs: String?
-        get() = preferences.getString(Preferences::intermediaryWhs.name, null)
+    var pinCode: String?
+        get() = preferences.getString(Preferences::pinCode.name, null)
         set(value) {
-            preferences.edit().putString(Preferences::intermediaryWhs.name, value).apply()
+            preferences.edit().putString(Preferences::pinCode.name, value).apply()
         }
 
     var defectWhs: String?

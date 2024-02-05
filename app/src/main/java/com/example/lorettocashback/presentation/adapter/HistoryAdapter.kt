@@ -13,6 +13,7 @@ import com.example.lorettocashback.databinding.BottomLoaderRecyclerBinding
 import com.example.lorettocashback.databinding.ItemHistoryBinding
 import com.example.lorettocashback.presentation.SapMobileApplication
 import com.example.lorettocashback.util.LoadMore
+import com.example.lorettocashback.util.Utils
 
 class HistoryAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(EventDiffUtil) {
 
@@ -58,8 +59,10 @@ class HistoryAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(EventDiffUtil) 
                 if (this is CashbackHistory) {
 
                     binding.itemName.text = this.itemName
-                    binding.textDate.text = this.date
-                    binding.cashbackAmount.text = this.cashbackAmount.toString()+"$"
+                    binding.textDate.text = Utils.convertUSAdatetoNormal(this.date)
+                    binding.serialNumber.text = this.serialNumber
+                    binding.cashbackAmount.text =
+                        Utils.getNumberWithThousandSeparator(this.cashbackAmount) + "$"
                     binding.statusItem.text = this.operationType
 
                     binding.statusItem.setBackgroundResource(

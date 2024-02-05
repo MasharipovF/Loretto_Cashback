@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.login
+package com.example.lorettocashback.presentation.screens.login
 
 import android.app.Activity
 import android.app.Dialog
@@ -25,7 +25,9 @@ import com.example.lorettocashback.core.GeneralConsts
 import com.example.lorettocashback.core.GeneralConsts.INTENT_EXTRA_BUSINESS_PARTNERS
 import com.example.lorettocashback.data.Preferences
 import com.example.lorettocashback.databinding.ActivityLoginBinding
-import com.example.lorettocashback.presentation.main.MainActivity
+import com.example.lorettocashback.presentation.screens.main.MainActivity
+import com.example.lorettocashback.presentation.screens.pin_code.PinCodeActivity
+import com.example.lorettocashback.presentation.screens.register_pincode.RegisterPinCodeActivity
 
 
 class LoginActivity : BaseActivity() {
@@ -54,6 +56,12 @@ class LoginActivity : BaseActivity() {
             showIpAddressDialog(this)
         }
 
+        if (Preferences.pinCode != null) {
+            val intent = Intent(this, PinCodeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         mViewModel.connectionError.observe(this) {
             Toast.makeText(this, "Connection error: " + mViewModel.errorString, Toast.LENGTH_SHORT)
                 .show()
@@ -79,7 +87,7 @@ class LoginActivity : BaseActivity() {
 
         mViewModel.loggedUser.observe(this) {
             if (it != null) {
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, RegisterPinCodeActivity::class.java)
                 intent.putExtra(INTENT_EXTRA_BUSINESS_PARTNERS, it)
                 startActivity(intent)
                 finish()

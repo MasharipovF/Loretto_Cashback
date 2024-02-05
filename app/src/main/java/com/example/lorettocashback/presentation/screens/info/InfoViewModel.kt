@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.info
+package com.example.lorettocashback.presentation.screens.info
 
 import com.example.lorettocashback.core.BaseViewModel
 

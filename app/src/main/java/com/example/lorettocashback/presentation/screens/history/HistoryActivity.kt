@@ -1,4 +1,4 @@
-package com.example.lorettocashback.presentation.history
+package com.example.lorettocashback.presentation.screens.history
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -84,8 +84,8 @@ class HistoryActivity : BaseActivity() {
             val view: View = LayoutInflater.from(this).inflate(R.layout.dialog_history, null)
             val binding = DialogHistoryBinding.bind(view)
             binding.itemNameDg.text = data.itemName
-            binding.textDateDg.text = data.date
-            binding.cashbackAmountDg.text = data.cashbackAmount.toString() + "$"
+            binding.textDateDg.text = Utils.convertUSAdatetoNormal(data.date)
+            binding.cashbackAmountDg.text = Utils.getNumberWithThousandSeparator(data.cashbackAmount) + "$"
             binding.itemStatusDg.text = data.operationType
             binding.itemGroupNameDg.text = data.itemsGroupName
             binding.itemCodeTextDg.text = data.itemCode
@@ -135,27 +135,6 @@ class HistoryActivity : BaseActivity() {
         } else {
             mViewModel.textDateLeFun(sdf.format(myCalendar.time))
         }
-
-
-        /*if (binding.textDataC.text.toString() != "Выбирать ..." && binding.textDataPo.text.toString() == "Выбирать ...") {
-            mViewModel.listDateQuery(
-                dateDe = binding.textDataC.text.toString()
-            )
-        }
-
-        if (binding.textDataC.text.toString() == "Выбирать ..." && binding.textDataPo.text.toString() != "Выбирать ...") {
-            mViewModel.listDateQuery(
-                dateLe = binding.textDataPo.text.toString()
-            )
-        }
-
-        if (binding.textDataC.text.toString() != "Выбирать ..." && binding.textDataPo.text.toString() != "Выбирать ...") {
-            mViewModel.listDateQuery(
-                dateDe = binding.textDataC.text.toString(),
-                dateLe = binding.textDataPo.text.toString()
-            )
-        }*/
-
     }
 
     private fun datePickerFun(

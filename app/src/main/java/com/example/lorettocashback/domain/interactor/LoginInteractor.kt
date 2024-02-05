@@ -13,7 +13,7 @@ import com.example.lorettocashback.domain.dto.error.ErrorResponse
 import com.example.lorettocashback.domain.dto.login.LoginResponseDto
 
 interface LoginInteractor {
-    suspend fun requestLogin(phone: String, password: String): CashbackUsers?
+    suspend fun requestLogin(phone: String?, password: String?): CashbackUsers?
     var errorMessage: String?
 }
 
@@ -25,8 +25,8 @@ class LoginInteractorImpl : LoginInteractor {
     override var errorMessage: String? = null
 
     override suspend fun requestLogin(
-        phone: String,
-        password: String,
+        phone: String?,
+        password: String?,
     ): CashbackUsers? {
 
         val response = repository.requestLogin()
@@ -44,8 +44,9 @@ class LoginInteractorImpl : LoginInteractor {
 
             return if (userResponse is CashbackUsersVal) {
 
-                if (!userResponse.value.isNullOrEmpty()) {
-                    Preferences.cardName = userResponse.value[0].fullName
+                if (userResponse.value.isNotEmpty()) {
+                    Preferences.phoneNumber = phone
+                    Preferences.password = password
                     Preferences.userCode = userResponse.value[0].userCode
                     userResponse.value[0]
                 } else {
