@@ -9,7 +9,6 @@ import com.example.lorettocashback.core.GeneralConsts.DOC_STATUS_CLOSED
 import com.example.lorettocashback.core.GeneralConsts.DOC_STATUS_CLOSED_NAME
 import com.example.lorettocashback.core.GeneralConsts.DOC_STATUS_OPEN
 import com.example.lorettocashback.core.GeneralConsts.DOC_STATUS_OPEN_NAME
-import com.example.lorettocashback.data.Preferences
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -75,7 +74,7 @@ object Utils {
         return "$year-$month-$day"
     }
 
-    fun getCurrentDateinUSAFormat(): String {
+    fun getCurrentDateInUSAFormat(): String {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)

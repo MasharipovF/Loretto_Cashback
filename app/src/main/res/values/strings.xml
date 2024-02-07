@@ -4,6 +4,7 @@
     <string name="loginHint">Login</string>
     <string name="passwordHint">Parol</string>
     <string name="connectBtn">Kirish</string>
+    <string name="potdverdit">ПОДТВЕРДИТЬ</string>
     <string name="askUsername">Iltimos loginingizni kiriting</string>
     <string name="askPassword">Iltimos parolingizni kiriting</string>
 

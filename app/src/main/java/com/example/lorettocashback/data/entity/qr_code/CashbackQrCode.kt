@@ -22,13 +22,13 @@ data class CashbackQrCode(
     val itemsGroupName: String,
 
     @SerializedName("SerialNumber")
-    val serialNumber: String,
+    val serialNumber: String?,
 
     @SerializedName("Asllik")
-    val asllik: Any,
+    val asllik: String?,
 
     @SerializedName("AbsEntry")
-    val absEntry: Int,
+    val absEntry: Int?,
 
     @SerializedName("CashbackAmount")
     val cashbackAmount: Double,

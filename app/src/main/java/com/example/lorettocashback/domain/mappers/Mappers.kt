@@ -11,7 +11,12 @@ import com.example.lorettocashback.data.entity.items.ItemWarehouseInfo
 import com.example.lorettocashback.data.entity.items.Items
 import com.example.lorettocashback.data.entity.items.ItemsCrossJoin
 import com.example.lorettocashback.data.entity.masterdatas.*
+import com.example.lorettocashback.data.entity.qr_code.CashbackQrCode
+import com.example.lorettocashback.data.model.StatusEnum
+import com.example.lorettocashback.data.entity.qr_code.request.CashbackTransRowCollection
+import com.example.lorettocashback.data.entity.qr_code.request.QrCodeRequest
 import com.example.lorettocashback.util.Utils
+import com.example.lorettocashback.util.Utils.getCurrentDateInUSAFormat
 import com.google.gson.Gson
 
 
@@ -44,18 +49,21 @@ object Mappers {
             // BUT WHEN WE LOAD SALES ORDER, WEE NEED TO GET NEW PRICE ACCORDING TO NEW CURRENCY RATE
             if (isViewMode) {
                 var currency: Double =
-                    Utils.roundDoubleValue(line.PriceAfterVATUZS?.div(line.PriceAfterVATUSD ?: 0.0)
-                        ?: 0.0)
+                    Utils.roundDoubleValue(
+                        line.PriceAfterVATUZS?.div(line.PriceAfterVATUSD ?: 0.0)
+                            ?: 0.0
+                    )
 
-                if (line.PriceAfterVATUSD==null || line.PriceAfterVATUSD==0.0)
+                if (line.PriceAfterVATUSD == null || line.PriceAfterVATUSD == 0.0)
                     currency = 0.0
 
 
-                line.BasePriceUZS = line.BasePriceUSD.times(currency ?: 0.0)?:0.0
-                line.UserPriceAfterVATUZS = line.PriceAfterVATUSD?.times(currency ?: 0.0)?:0.0
+                line.BasePriceUZS = line.BasePriceUSD.times(currency ?: 0.0) ?: 0.0
+                line.UserPriceAfterVATUZS = line.PriceAfterVATUSD?.times(currency ?: 0.0) ?: 0.0
             } else {
-                line.BasePriceUZS = line.BasePriceUSD.times(Preferences.currencyRate)?:0.0
-                line.UserPriceAfterVATUZS = line.PriceAfterVATUSD?.times(Preferences.currencyRate)?:0.0
+                line.BasePriceUZS = line.BasePriceUSD.times(Preferences.currencyRate) ?: 0.0
+                line.UserPriceAfterVATUZS =
+                    line.PriceAfterVATUSD?.times(Preferences.currencyRate) ?: 0.0
             }
 
             resultList.add(line)
@@ -74,7 +82,7 @@ object Mappers {
         val resultList = ArrayList<DocumentLinesForPost>()
         docLines.forEachIndexed { index, line ->
             // IF WE ARE NOT UPDATING, THEN WE DO NOT NEED TO ADD CLOSED LINE TO THE DOCUMENT
-            if (line.LineStatus == GeneralConsts.DOC_STATUS_CLOSED  && isCopyFrom) {
+            if (line.LineStatus == GeneralConsts.DOC_STATUS_CLOSED && isCopyFrom) {
 
             } else {
                 val updateLine = DocumentLinesForPost(
@@ -114,7 +122,6 @@ object Mappers {
 
         return resultList
     }
-
 
 
     fun mapItemsCrossJoinToItems(sourceList: List<ItemsCrossJoin>?): List<Items> {
@@ -276,6 +283,38 @@ object Mappers {
 
         }
         return resultList
+    }
+
+    fun mapCashbackQrCodeToRequestQrCode(
+        cashbackList: List<CashbackQrCode>?
+    ): QrCodeRequest {
+        val list = ArrayList<CashbackTransRowCollection>()
+
+        var totalCashback = 0.0
+
+        cashbackList?.forEach {
+            totalCashback += it.cashbackAmount
+
+            val transRow = CashbackTransRowCollection(
+                uItemCode = it.itemCode,
+                uItemName = it.itemName,
+                uSerialNumber = it.serialNumber,
+                uAsllik = it.asllik,
+                uAbsEntry = it.absEntry,
+                uCashbackAmount = it.cashbackAmount,
+            )
+            list.add(transRow)
+
+        }
+
+
+        return QrCodeRequest(
+            uDate = getCurrentDateInUSAFormat(),
+            uUserId = Preferences.userCode ?: "",
+            uOperationType = StatusEnum.GAINED.statusName,
+            uTotal = totalCashback,
+            CASHBACK_TRANS_ROWCollection = list
+        )
     }
 
     fun mapBpGroupCodeToName(source: List<BusinessPartnerGroups>?, searchFor: Int?): String {

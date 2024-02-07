@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Rect
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -97,7 +98,9 @@ class QrCodeActivity : BaseActivity() {
         mViewModel.data.observe(this, dataObserve)
         mViewModel.listData.observe(this, listDataObserve)
         mViewModel.loading.observe(this, loadingObserve)
+        mViewModel.loadingButton.observe(this, loadingObserveButton)
         mViewModel.errorData.observe(this, errorDataObserve)
+        mViewModel.resonseData.observe(this, responseDataObserve)
 
     }
 
@@ -130,6 +133,12 @@ class QrCodeActivity : BaseActivity() {
             list.remove(it)
             mViewModel.getDataList(list)
         }
+
+        binding.podtverditBnt.setOnClickListener {
+            if (list.size != 0) {
+                mViewModel.postQrCode(list)
+            }
+        }
     }
 
     private val dataObserve = Observer<CashbackQrCode> {
@@ -155,6 +164,14 @@ class QrCodeActivity : BaseActivity() {
         }
     }
 
+    private val loadingObserveButton = Observer<Boolean> {
+        if (it) {
+            binding.progressBarBtn.visibility = View.VISIBLE
+        } else {
+            binding.progressBarBtn.visibility = View.GONE
+        }
+    }
+
     private val errorDataObserve = Observer<String> {
         showSnackbar(
             binding.container,
@@ -168,6 +185,17 @@ class QrCodeActivity : BaseActivity() {
         } else {
             vibrator.vibrate(100)
         }
+    }
+
+    private val responseDataObserve = Observer<String> {
+        showSnackbar(
+            binding.container,
+            it,
+            R.color.red
+        )
+
+        list.clear()
+        mViewModel.getDataList(list)
     }
 
     private fun permission() {
@@ -215,7 +243,7 @@ class QrCodeActivity : BaseActivity() {
                     .build()
                 imageAnalysis.setAnalyzer(
                     cameraExecutor,
-                    BarcodeAnalyzer(mViewModel, barcodeScanner)
+                    BarcodeAnalyzer(binding.scView, mViewModel, barcodeScanner)
                 )
 
                 cameraProvider.unbindAll()
@@ -260,6 +288,7 @@ class QrCodeActivity : BaseActivity() {
 }
 
 class BarcodeAnalyzer(
+    private val scView: View,
     private val mViewModel: QrCodeViewModel,
     private val barcodeScanner: BarcodeScanner,
 ) : ImageAnalysis.Analyzer {
@@ -274,19 +303,23 @@ class BarcodeAnalyzer(
         if (mediaImage != null) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
+
             barcodeScanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     if (barcodes.isNotEmpty()) {
                         for (barcode in barcodes) {
                             val value = barcode.displayValue
-                            if (time == 0L) {
-                                mViewModel.getData(value.toString())
-                                time = SystemClock.elapsedRealtime()
-                            } else {
-                                val currentTime = SystemClock.elapsedRealtime()
-                                if (currentTime - time >= 3000) {
+                            val barcodeBox = barcode.boundingBox
+                            if (isBoundingBoxInsideScView(barcodeBox)) {
+                                if (time == 0L) {
                                     mViewModel.getData(value.toString())
-                                    time = currentTime
+                                    time = SystemClock.elapsedRealtime()
+                                } else {
+                                    val currentTime = SystemClock.elapsedRealtime()
+                                    if (currentTime - time >= 3000) {
+                                        mViewModel.getData(value.toString())
+                                        time = currentTime
+                                    }
                                 }
                             }
                         }
@@ -301,4 +334,20 @@ class BarcodeAnalyzer(
 
         }
     }
+
+    private fun isBoundingBoxInsideScView(boundingBox: Rect?): Boolean {
+        boundingBox?.let {
+            val scViewTop = scView.top
+            val scViewRight = scView.right
+            val scViewBottom = scView.bottom
+
+            return it.top >= scViewTop &&
+                    it.right <= scViewRight &&
+                    it.bottom <= scViewBottom
+        }
+        return false
+    }
+
 }
+
+

@@ -284,5 +284,5 @@ data class ExchangeRates(
     @SerializedName("Currency")
     var currency: String = GeneralConsts.SECONDARY_CURRENCY,
     @SerializedName("Date")
-    var date: String = Utils.getCurrentDateinUSAFormat()
+    var date: String = Utils.getCurrentDateInUSAFormat()
 )
